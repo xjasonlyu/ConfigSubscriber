@@ -14,9 +14,9 @@ def _read_template(name):
 def index():
     return render_template_string(
         _read_template('index.html'),
-        title = '༼ つ ◕_◕ ༽つ',
-        message = '(╯°□°)╯︵ ┻━┻',
+        title='༼ つ ◕_◕ ༽つ',
+        message='(╯°□°)╯︵ ┻━┻',
     )
 
 
-__plugins__ = { '/': index }
+__plugins__ = {'/': index}

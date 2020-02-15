@@ -6,11 +6,13 @@ from flask import Response
 
 
 def get_ip():
+    result = request.remote_addr
+    mime = 'text/plain'
     if request.path == '/ip':
-        return Response(request.remote_addr, mimetype='text/plain')
+        return Response(result, mimetype=mime)
     elif request.path == '/jsonip':
         mime = 'application/json'
-        result = json.dumps({ 'ip': request.remote_addr })
+        result = json.dumps({'ip': result})
     # callback
     f = request.args.get('callback')
     if f:

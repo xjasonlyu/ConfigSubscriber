@@ -23,8 +23,9 @@ def init():
     app.debug = cfg.getboolean('common', 'debug', fallback=False)
     if not app.debug:
         log_file = cfg.get('common', 'log', fallback=None)
-        log_level = getattr(logging, \
-            cfg.get('common', 'loglevel', fallback='info').upper(), logging.INFO)
+        log_level = getattr(logging,
+                            cfg.get('common', 'loglevel', fallback='info').upper(),
+                            logging.INFO)
         if log_file:
             logging.basicConfig(
                 filename=log_file,
@@ -33,11 +34,11 @@ def init():
             )
 
     # PLUGINS
-    plugins = re.sub(',|:|;|\'|"', ' ', \
-        cfg.get('plugins', 'name', fallback='')).split()
+    plugins = re.sub(r',|:|;|\'|"', ' ',
+                     cfg.get('plugins', 'name', fallback='')).split()
     for plugin in plugins:
         # import plugins
-        p = '.'.join([ 'plugins', plugin ])
+        p = '.'.join(['plugins', plugin])
         m = importlib.import_module(p)
         # add each function to app url rules
         for u, f in m.__plugins__.items():
