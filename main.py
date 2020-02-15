@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import os
 import re
 import logging
 import importlib
+from os import path
 from flask import Flask
 from configparser import ConfigParser
 
@@ -12,13 +12,12 @@ from configparser import ConfigParser
 app = Flask(__name__)
 
 # Global Variables
+cwd = path.dirname(__file__)
 cfg = ConfigParser()
-cwd = os.path.dirname(__file__)
+cfg.read(path.join(cwd, 'config.ini'))
 
 
 def init():
-    cfg.read(os.path.join(cwd, 'config.ini'))
-
     # DEBUG & LOG
     app.debug = cfg.getboolean('common', 'debug', fallback=False)
     if not app.debug:
