@@ -2,12 +2,11 @@
 
 import re
 
-from . import Node
 from . import utils
-from . import exceptions
+from . import constants
 
 
-class N3roNode(Node):
+class N3roNode(constants.Node):
 
     def __init__(self, s):
         data = self._re_(s.upper())
@@ -30,5 +29,5 @@ class N3roNode(Node):
         r = re.compile(r'^([\w\-.]+?) (.+?) (\d+?)$')
         results = r.findall(s)
         if len(results) != 1:
-            raise exceptions.ScriptError(f'regex mismatch {len(results)}')
+            raise constants.ScriptError(f'regex mismatch {len(results)}')
         return results[0]
