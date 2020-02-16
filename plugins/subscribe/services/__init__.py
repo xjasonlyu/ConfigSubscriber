@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+# builtin packages
+from . import utils
+from . import exceptions
+
+# services
+from . import n3ro
+
 
 class Node:
 
@@ -12,11 +19,3 @@ class Node:
 
     def __init__(self, *args, **kwargs):
         pass
-
-
-# builtin packages
-from . import utils
-from . import exceptions
-
-# services
-from . import n3ro

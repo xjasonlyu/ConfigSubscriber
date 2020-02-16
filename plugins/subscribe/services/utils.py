@@ -25,16 +25,16 @@ __region2iso__ = {
 
 
 def str2iso(name, ignore=False):
-    l = [ __region2iso__[i] for i in name if i in __region2iso__ ]
+    match = [__region2iso__[i] for i in name if i in __region2iso__]
 
-    if len(l) == 1:
-        return l[0]
+    if len(match) == 1:
+        return match[0]
     elif ignore:
         return
-    elif len(l) == 0:
+    elif len(match) == 0:
         raise Exception(f"no region detected: {name}")
     else:
-        raise Exception(f"multiple region detected: {l}")
+        raise Exception(f"multiple region detected: {match}")
 
 
 def iso2flag(iso: str) -> str:
@@ -46,8 +46,8 @@ def flagize(text: str) -> str:
         points = [ord(x) + 127397 for x in code.upper()]
         return chr(points[0]) + chr(points[1])
 
-    def flag_repl(matchobj):
-        return flag(matchobj.group(1))
+    def flag_repl(match_obj):
+        return flag(match_obj.group(1))
 
     return re.sub(':([a-zA-Z]{2}):', flag_repl, text)
 
@@ -57,15 +57,15 @@ def dflagize(text: str) -> str:
         points = tuple(ord(x) - 127397 for x in i)
         return ':%c%c:' % points
 
-    def dflag_repl(matchobj):
-        return dflag(matchobj.group(0))
+    def dflag_repl(match_obj):
+        return dflag(match_obj.group(0))
 
     regex = re.compile(u'([\U0001F1E6-\U0001F1FF]{2})', flags=re.UNICODE)
     return regex.sub(dflag_repl, text)
 
 
 # simple curl in python version
-def curl(url: str, timeout: int=None, allow_redirects: bool=False) -> bytes:
+def curl(url: str, timeout: int = None, allow_redirects: bool = False) -> bytes:
     # process URL
     if not re.match('(http|https|file)://', url):
         url = 'http://' + url

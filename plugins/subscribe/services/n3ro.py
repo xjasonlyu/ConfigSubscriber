@@ -7,7 +7,7 @@ from . import utils
 from . import exceptions
 
 
-class n3roNode(Node):
+class N3roNode(Node):
 
     def __init__(self, s):
         data = self._re_(s.upper())
@@ -27,7 +27,7 @@ class n3roNode(Node):
         s = s.replace(' → ', '→')
         if not re.match(r'\d\d', s[-2:]):
             s += ' ' + '00'
-        r = re.compile(r'^([\w\-\.]+?) (.+?) (\d+?)$')
+        r = re.compile(r'^([\w\-.]+?) (.+?) (\d+?)$')
         results = r.findall(s)
         if len(results) != 1:
             raise exceptions.ScriptError(f'regex mismatch {len(results)}')
