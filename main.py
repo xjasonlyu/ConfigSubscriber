@@ -22,15 +22,14 @@ def init():
     app.debug = cfg.getboolean('common', 'debug', fallback=False)
     if not app.debug:
         log_file = cfg.get('common', 'log', fallback=None)
-        log_level = getattr(logging,
-                            cfg.get('common', 'loglevel', fallback='info').upper(),
-                            logging.INFO)
-        if log_file:
-            logging.basicConfig(
-                filename=log_file,
-                format='%(asctime)s %(levelname)s: %(message)s',
-                level=log_level
-            )
+        log_level = cfg.get('common', 'loglevel', fallback='info').upper()
+        if log_file or log_level not in ('NONE', 'SILENT'):
+            handler = logging.handlers.RotatingFileHandler(
+                log_file, maxBytes=1024*1024*100, backupCount=5)
+            handler.setLevel(getattr(logging, log_level, logging.INFO))
+            handler.setFormatter(logging.Formatter(
+                '%(asctime)s %(levelname)s: %(message)s'))
+            app.logger.addHandler(handler)
 
     # PLUGINS
     plugins = re.sub(r',|:|;|\'|"', ' ',
@@ -39,6 +38,9 @@ def init():
         # import plugins
         p = '.'.join(['plugins', plugin])
         m = importlib.import_module(p)
+        if not hasattr(m, '__plugins__'):
+            app.logger.error(f'Invalid plugin package: {m.__name__}')
+            continue
         # add each function to app url rules
         for u, f in m.__plugins__.items():
             app.add_url_rule(u, view_func=f)
