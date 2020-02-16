@@ -1,3 +1,6 @@
 #!/usr/bin/env python3
 
-__plugins__ = dict()
+from . import policy
+from . import subscribe
+
+__plugins__ = {'/subscribe/<client>': subscribe.subscribe}

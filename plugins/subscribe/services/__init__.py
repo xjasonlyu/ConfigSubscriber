@@ -2,20 +2,12 @@
 
 # builtin packages
 from . import utils
-from . import exceptions
+from . import constants
 
 # services
 from . import n3ro
 
 
-class Node:
-
-    tag = ''
-    name = ''
-    code = ''
-    flag = ''
-    rate = 1.0
-    region = ''
-
-    def __init__(self, *args, **kwargs):
-        pass
+__NODE__ = {
+    'N3RO': n3ro.N3roNode
+}
