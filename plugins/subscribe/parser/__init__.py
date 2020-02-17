@@ -11,7 +11,7 @@ from . import utils
 from . import exceptions
 
 
-class __INDEX__:
+class __MAP__:
 
     def __init__(self):
         files = (path.basename(f) for f in os.listdir(path.dirname(__file__)))
@@ -29,4 +29,8 @@ class __INDEX__:
             return default
 
 
-INDEX = __INDEX__()
+__map__ = __MAP__()
+
+
+def get(*args, **kwargs):
+    return __map__.get(*args, **kwargs)
