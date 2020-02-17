@@ -24,7 +24,7 @@ class __MAP__:
 
     def get(self, key, default=base.nodalize):
         try:
-            self.__getitem__(key)
+            return self.__getitem__(key)
         except KeyError:
             return default
 
