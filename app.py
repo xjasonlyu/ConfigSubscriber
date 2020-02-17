@@ -33,7 +33,7 @@ def init():
 
     # PLUGINS
     plugins = re.sub(r',|:|;|\'|"', ' ',
-                     cfg.get('plugins', 'name', fallback='')).split()
+                     cfg.get('common', 'plugins', fallback='')).split()
     for plugin in plugins:
         # import plugins
         p = '.'.join(['plugins', plugin])
