@@ -4,6 +4,10 @@ import re
 import requests
 from os import path
 
+from . import exceptions
+
+# Builtin types
+__types__ = (str, bytes, bool, int, float, complex, list, tuple, dict, set)
 
 # common region mapping
 __region2iso__ = {
@@ -32,9 +36,9 @@ def str2iso(name, ignore=False):
     elif ignore:
         return
     elif len(match) == 0:
-        raise Exception(f"no region detected: {name}")
+        raise exceptions.ScriptError(f'no region detected: {name}')
     else:
-        raise Exception(f"multiple region detected: {match}")
+        raise exceptions.ScriptError(f'multiple region detected: {match}')
 
 
 def iso2flag(iso: str) -> str:
