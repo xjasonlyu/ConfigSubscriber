@@ -6,7 +6,7 @@ from . import base
 from . import utils
 from . import exceptions
 
-
+# NAME: n3ro
 class N3RO(base.Node):
 
     def __init__(self, s):
@@ -34,5 +34,5 @@ class N3RO(base.Node):
         return results[0]
 
 
-def node(*args, **kwargs):
+def nodalize(*args, **kwargs):
     return N3RO(*args, **kwargs)

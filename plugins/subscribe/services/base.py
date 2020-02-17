@@ -25,3 +25,7 @@ class Node:
 
     def __str__(self):
         return f'{self.flag} {self.name} {self.code} {self.tag}'
+
+
+def nodalize(*args, **kwargs):
+    return Node(*args, **kwargs)
