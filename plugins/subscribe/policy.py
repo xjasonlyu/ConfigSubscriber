@@ -1,83 +1,62 @@
 #!/usr/bin/env python3
 
+import json
 import base64
-from functools import reduce
 
 
-# Clients
-CLASH = 0
-SURGE = 1
-OUTLINE = 2
+# Filters
+def FILTER(_): return True
 
-__CLIENTS__ = {'clash': CLASH, 'surge': SURGE, 'outline': OUTLINE}
 
-# Policies
-SELECT = 0
-AUTOURL = 1
-FALLBACK = 2
+# util to access dict with dot
+class __DICT2CLASS__:
 
-__POLICIES__ = {'select': SELECT, 'auto-url': AUTOURL, 'fallback': FALLBACK}
+    def __init__(self, mapping: dict):
+        self.mapping = mapping
 
-# Proxy formatter mapping
-PROXIES = {
-    CLASH:   '  - {{ name: {proxy.node}, type: {proxy.type}, server: {proxy.server}, port: {proxy.port}, '
-             'cipher: {proxy.cipher}, password: {proxy.password}, '
-             'udp: {proxy.udp} }}',
-    SURGE:   '{proxy.node} = {proxy.type}, {proxy.server}, {proxy.port}, '
-             'encrypt-method={proxy.cipher}, password={proxy.password}, '
-             'udp-relay={proxy.udp}',
-    OUTLINE: 'ss://{code}@{proxy.server}:{proxy.port}',
-}
-
-# Policy formatter mapping
-POLICES = {
-    CLASH: {
-        SELECT:   '  - {{ name: {name}, type: select, proxies: [{nodes}] }}',
-        AUTOURL:  '  - {{ name: {name}, type: url-test, proxies: [{nodes}], '
-                  'url: http://www.gstatic.com/generate_204, interval: 120 }}',
-        FALLBACK: '  - {{ name: {name}, type: fallback, proxies: [{nodes}], '
-                  'url: http://www.gstatic.com/generate_204, interval: 120 }}',
-    },
-    SURGE: {
-        SELECT:   '{name} = select, {nodes}',
-        AUTOURL:  '{name} = url-test, {nodes}, url=http://www.gstatic.com/generate_204, interval=120, tolerance=30',
-        FALLBACK: '{name} = fallback, {nodes}, url=http://www.gstatic.com/generate_204, interval=120, tolerance=30',
-    },
-}
-
-# Default filter (always return true)
-FILTER = type
+    def __getattr__(self, key):
+        return self.mapping.get(key)
 
 
 class Proxy:
 
-    def __init__(self, proxy, node):
-        self.name = proxy.get('name', '')
-        self.type = proxy.get('type', '')
-        self.server = proxy.get('server', '')
-        self.port = proxy.get('port', 0)
-        self.cipher = proxy.get('cipher', '')
-        self.password = proxy.get('password', '')
+    def __init__(self, config, parse):
+        self.name = config.get('name', '')
+        self.type = config.get('type', '')
+        self.server = config.get('server', '')
+        self.port = config.get('port', 0)
+        self.cipher = config.get('cipher', '')
+        # ss
+        self.password = config.get('password', '')
         # default enable udp
-        self.udp = 'true' if proxy.get('udp', True) else 'false'
+        self.udp = json.dumps(config.get('udp', True))
+        # TODO: support vmess & other protocols
+        # self.uuid = config.get('uuid', '')
+        # self.alterId = config.get('alterId', '')
+        # self.username = config.get('username', '')
+        # # default disable tls
+        # self.tls = json.dumps(config.get('tls', True))
+        #
         # Nodalize
-        self.node = node(self.name)
+        self.node = parse(self.name)
 
-    def serialize(self, client):
-        if client == OUTLINE:
-            code = base64.urlsafe_b64encode(f'{self.cipher}:{self.password}'.encode()).decode()
-            return PROXIES[client].format(code=code, proxy=self)
-        else:
-            return PROXIES[client].format(proxy=self)
+    def __iter__(self):
+        for key in self.__dict__:
+            if key.startswith('__'):
+                continue
+            if key == 'node':
+                yield (key, dict(self.node))
+            else:
+                yield (key, getattr(self, key))
 
 
-class Group:
+class ProxyGroup:
 
-    def __init__(self, raw_proxies, node, f=FILTER):
+    def __init__(self, raw_proxies, parse):
 
-        proxies = list(filter(f, map(lambda i: Proxy(i, node), raw_proxies)))
+        proxies = list(map(lambda p: Proxy(p, parse), raw_proxies))
 
-        regions = dict()
+        regions = {}
         for p in proxies:
             if not regions.get(p.node.region):
                 regions[p.node.region] = [p]
@@ -85,25 +64,25 @@ class Group:
                 regions[p.node.region].append(p)
 
         self.regions = regions
-
         self.proxies = proxies
         self.proxies.sort(key=lambda i: (i.node.tag, str(i.node)))
 
     def __len__(self):
         return len(self.proxies)
 
-    def get_policy(self, region, name, client=CLASH, policy=SELECT, f=FILTER):
-        if not region:
-            proxies = self.proxies
-        else:
-            proxies = reduce(lambda x, y: x+y, [self.regions.get(r, []) for r in region.split('|')])
+    def __iter__(self):
+        for proxy in self.proxies:
+            yield proxy
 
-        if not proxies:
-            return ''
+    def get_proxies(self, f=FILTER):
+        return filter(f, self.proxies)
 
-        nodes = ', '.join([str(p.node) for p in filter(f, proxies)])
+    def get_policies(self, f=FILTER, **kwargs):
+        # set attrs to empty dict if not set
+        kwargs['attrs'] = kwargs.get('attrs', {})
+        # generate nodes field
+        nodes = ', '.join((str(p.node) for p in filter(f, self.proxies)))
+        # update nodes to kwargs
+        kwargs.update(nodes=nodes)
 
-        return POLICES[client][policy].format(name=name, nodes=nodes)
-
-    def get_proxies(self, client=CLASH):
-        return '\n'.join([p.serialize(client) for p in self.proxies])
+        return __DICT2CLASS__(kwargs)

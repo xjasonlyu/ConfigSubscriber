@@ -1,0 +1,25 @@
+{
+    "test": {
+        "link": "https://nnn3ro.link/link/...",
+        "parser": "n3ro",
+        "template": {
+            "clash": "clash.yaml",
+            "surge": "surge.conf"
+        },
+        "filter": "lambda p: p.node.tag in ('IPLC', 'RELAY')",
+        "groups": [
+            {"name": "MANUAL", "type": "select"},
+            {"name": "HK-AUTO", "type": "url-test", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}, "f": "lambda p: p.node.region == 'HK' and p.node.tag == 'IPLC' and __import__('re').search('上|深|广', p.name)"},
+            {"name": "JP-AUTO", "type": "url-test", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}, "f": "lambda p: p.node.region == 'JP' and p.node.tag == 'IPLC' and __import__('re').search('上|深|广', p.name)"},
+            {"name": "SG-AUTO", "type": "url-test", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}, "f": "lambda p: p.node.region == 'SG' and p.node.tag == 'IPLC' and __import__('re').search('上|深|广', p.name)"},
+            {"name": "US-AUTO", "type": "url-test", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}, "f": "lambda p: p.node.region == 'US' and p.node.tag == 'IPLC' and __import__('re').search('上|深|广', p.name)"},
+            {"name": "HK-PEER", "type": "select", "f": "lambda p: p.node.region == 'HK'"},
+            {"name": "JP-PEER", "type": "select", "f": "lambda p: p.node.region == 'JP'"},
+            {"name": "SG-PEER", "type": "select", "f": "lambda p: p.node.region == 'SG'"},
+            {"name": "US-PEER", "type": "select", "f": "lambda p: p.node.region == 'US'"}
+        ],
+        "extras": {
+            "names": "JP-AUTO, HK-AUTO, SG-AUTO, US-AUTO, JP-PEER, HK-PEER, SG-PEER, US-PEER, MANUAL"
+        }
+    }
+}

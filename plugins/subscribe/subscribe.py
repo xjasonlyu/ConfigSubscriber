@@ -1,67 +1,115 @@
 #!/usr/bin/env python3
 
+import re
+import json
 import yaml
+import requests
 from os import path
 
+# local modules
+from . import parser
 from . import policy
-from . import services
 
-# User instances
-from . import instances
-
+# flask modules
 from flask import jsonify
 from flask import request
 from flask import Response
 from flask import render_template_string
 
 
-# auth code mapping
-AUTH_MAP = dict()
+# auth & config dict
+__CONFIG__ = None
 
 
 def init():
-    for m in instances.__EXPORT__:
-        m.SERVICE = m.SERVICE.upper()
-        AUTH_MAP[m.AUTH] = m
+    global __CONFIG__
+
+    with open(path.join(path.dirname(__file__), 'config.json')) as f:
+        __CONFIG__ = json.load(f)
+
+    for _, data in __CONFIG__.items():
+        if data.get('filter'):
+            # TODO: replace eval with safer operation
+            data['filter'] = eval(data['filter'])
+
+        for opt in data['groups']:
+            if opt.get('f'):
+                # TODO: same with above
+                opt['f'] = eval(opt['f'])
 
 
 init()
 
 
+# simple curl in python version
+def curl(url: str, timeout: int = None, allow_redirects: bool = False) -> str:
+    # process URL
+    if not re.match('(http|https|file)://', url):
+        url = 'http://' + url
+    # file protocol
+    if url.startswith('file://'):
+        url = url[7:]
+        if not path.exists(url):
+            return ''
+        with open(url, 'r') as f:
+            return f.read()
+    # curl headers
+    headers = {
+        'User-Agent': 'curl',
+        'Accept': '*/*'
+    }
+    # requests session
+    s = requests.Session()
+    s.trust_env = False
+    # requests
+    try:
+        r = s.get(url, headers=headers, timeout=timeout, allow_redirects=allow_redirects)
+        r.raise_for_status()
+        return r.text
+    except:
+        return ''
+
+
 def get_proxies(url):
-    content = services.utils.curl(url, 5, True)
-    items = yaml.safe_load(content.decode())
+    text = curl(url, 5, True)
+    items = yaml.safe_load(text)
     return items['Proxy']
 
 
 def get_template(name):
     template_file = path.join(path.dirname(__file__), 'templates', name)
-    with open(template_file) as f:
-        return f.read()
+    return curl('file://'+path.abspath(template_file))
 
 
 def subscribe(client):
-    client = policy.__CLIENTS__.get(client.lower())
-    if client is None:
+    client = client.lower()
+    if client not in config['template']:
         return jsonify({'status': False, 'message': 'Client type not found.'}), 404
 
     auth = request.args.get('auth')
-    if not auth or auth not in AUTH_MAP:
+    if auth not in __CONFIG__:
         return jsonify({'status': False, 'message': 'Auth challenge failed.'}), 401
 
-    m = AUTH_MAP[auth]
+    config = __CONFIG__[auth]
 
-    if hasattr(m, 'PROXIES_FILTER'):
-        group = policy.Group(get_proxies(m.LINK), services.__NODE__[m.SERVICE], m.PROXIES_FILTER)
+    try:
+        raw_proxies = get_proxies(config['link'])
+    except:
+        return jsonify({'status': False, 'message': 'Fetch link failed.'}), 500
+
+    # get default parser if 'parser' field is empty
+    group = policy.ProxyGroup(raw_proxies, parser.get(config.get('parser')))
+
+    if config.get('filter'):
+        proxies = group.get_proxies(f=config['filter'])
     else:
-        group = policy.Group(get_proxies(m.LINK), services.__NODE__[m.SERVICE])
+        proxies = group.get_proxies()
 
-    proxies = group.get_proxies(client)
-    policies = '\n'.join([group.get_policy(**kwarg, client=client) for kwarg in m.POLICIES_ARGS])
+    policies = (group.get_policies(**kwargs) for kwargs in config['groups'])
 
     return render_template_string(
-        source=get_template(m.TEMPLATE[client]),
+        source=get_template(config['template'][client]),
         proxies=proxies,
-        names=m.NAMES,
         policies=policies,
+        **config.get('extras', {})
     )
