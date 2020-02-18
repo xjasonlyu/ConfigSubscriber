@@ -30,9 +30,9 @@ def str2iso(name, ignore=False):
     elif ignore:
         return
     elif len(match) == 0:
-        raise Warning(f'no region detected: {name}')
+        raise Warning(f'no region detected')
     else:
-        raise Warning(f'multiple region detected: {match}')
+        raise Warning(f'multiple region detected')
 
 
 def iso2flag(iso: str) -> str:

@@ -57,10 +57,13 @@ def subscribe(client):
         items = yaml.safe_load(text)
         raw_proxies = items['Proxy']
     except:
-        return jsonify({'status': False, 'message': 'API call failed.'}), 500
+        return jsonify({'status': False, 'message': 'Fetch original config failed.'}), 500
 
-    # get default parser if 'parser' field is empty
-    group = policy.ProxyGroup(raw_proxies, parser.get(cfg.get('parser')))
+    try:
+        # get default parser if 'parser' field is empty
+        group = policy.ProxyGroup(raw_proxies, parser.get(cfg.get('parser')))
+    except parser.ParseError as e:
+        return jsonify({'status': False, 'message': f'Parse config failed: {e}'}), 500
 
     proxies = group.get_proxies(f=cfg['filter'])
     policies = (group.get_policy(**kwargs) for kwargs in cfg['policies'])

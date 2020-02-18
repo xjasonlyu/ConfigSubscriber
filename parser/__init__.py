@@ -10,6 +10,10 @@ from . import base
 from . import utils
 
 
+class ParseError(Exception):
+    pass
+
+
 class Map:
 
     def __init__(self):
@@ -32,4 +36,12 @@ __map__ = Map()
 
 
 def get(*args, **kwargs):
-    return __map__.get(*args, **kwargs)
+    def _decorator(nodalize):
+        def _wrapper(name):
+            try:
+                return nodalize(name)
+            except Exception as e:
+                raise ParseError(f'{name}: {e}')
+        return _wrapper
+
+    return _decorator(__map__.get(*args, **kwargs))
