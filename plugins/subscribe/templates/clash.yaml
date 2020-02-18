@@ -7,8 +7,8 @@ external-controller: 127.0.0.1:9090
 cfw-latency-url: http://www.gstatic.com/generate_204
 # Proxy & Group
 Proxy:
-{{ proxies }}
-Proxy Group:
+{% for proxy in proxies %}  - { name: {{ proxy.node }}, type: {{ proxy.type }}, server: {{ proxy.server }}, port: {{ proxy.port }}, cipher: {{ proxy.cipher }}, password: {{ proxy.password }}, udp: {{ proxy.udp }} }
+{% endfor %}Proxy Group:
   - { name: PROXY, type: select, proxies: [{{ names }}] }
   - { name: APPLE, type: select, proxies: [PROXY, DIRECT] }
   - { name: MEDIA, type: select, proxies: [PROXY, MANUAL] }
@@ -16,8 +16,8 @@ Proxy Group:
   - { name: CNRULE, type: select, proxies: [DIRECT, PROXY] }
   - { name: MYRULE, type: select, proxies: [DIRECT, PROXY] }
   - { name: DETOUR, type: select, proxies: [PROXY, DIRECT] }
-{{ policies }}
-Rule:
+{% for policy in policies %}  - { name: {{ policy.name }}, type: {{ policy.type }}, proxies: [{{ policy.nodes }}]{% for k, v in policy.attrs.items() %}, {{ k }}: {{ v }}{% endfor %} }
+{% endfor %}Rule:
   - DOMAIN-SUFFIX,12x.me,MYRULE
   - DOMAIN-SUFFIX,xjasonlyu.com,MYRULE
   - DOMAIN,audio-ssl.itunes.apple.com,APPLE
