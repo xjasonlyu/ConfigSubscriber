@@ -8,7 +8,6 @@ from importlib import import_module
 # builtin packages
 from . import base
 from . import utils
-from . import exceptions
 
 
 class __MAP__:

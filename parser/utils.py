@@ -4,7 +4,6 @@ import re
 import requests
 from os import path
 
-from . import exceptions
 
 # Builtin types
 __types__ = (str, bytes, bool, int, float, complex, list, tuple, dict, set)
@@ -36,9 +35,9 @@ def str2iso(name, ignore=False):
     elif ignore:
         return
     elif len(match) == 0:
-        raise exceptions.ScriptError(f'no region detected: {name}')
+        raise Warning(f'no region detected: {name}')
     else:
-        raise exceptions.ScriptError(f'multiple region detected: {match}')
+        raise Warning(f'multiple region detected: {match}')
 
 
 def iso2flag(iso: str) -> str:

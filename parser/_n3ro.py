@@ -4,7 +4,6 @@ import re
 
 from . import base
 from . import utils
-from . import exceptions
 
 # NAME: n3ro
 class N3RO(base.Node):
@@ -30,7 +29,7 @@ class N3RO(base.Node):
         r = re.compile(r'^([\w\-.]+?) (.+?) (\d+?)$')
         results = r.findall(s)
         if len(results) != 1:
-            raise exceptions.ScriptError(f'regex mismatch {len(results)}')
+            raise Warning(f'regex mismatch {len(results)}')
         return results[0]
 
 
