@@ -7,15 +7,19 @@ import requests
 from os import path
 
 # local modules
-from . import parser
-from . import policy
+import parser
+import policy
 
 # flask modules
+from flask import Flask
 from flask import jsonify
 from flask import request
 from flask import Response
 from flask import render_template_string
 
+
+# Global Flask Instance
+app = Flask(__name__)
 
 # auth & config dict
 __CONFIG__ = None
@@ -81,6 +85,7 @@ def get_template(name):
     return curl('file://'+path.abspath(template_file))
 
 
+@app.route('/subscribe/<client>')
 def subscribe(client):
     client = client.lower()
     if client not in config['template']:
