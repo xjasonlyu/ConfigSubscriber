@@ -3,9 +3,6 @@
 import re
 
 
-# Builtin types
-__types__ = (str, bytes, bool, int, float, complex, list, tuple, dict, set)
-
 # common region mapping
 __region2iso__ = {
         '港': 'HK',
