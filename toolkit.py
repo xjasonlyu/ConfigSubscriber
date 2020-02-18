@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import re
-import json
-import yaml
 import requests
 from os import path
 
@@ -10,8 +8,8 @@ from os import path
 # access dict with dot
 class Dotty:
 
-    def __init__(self, data):
-        self._data = dict(data)
+    def __init__(self, data: dict):
+        self._data = data
 
     def __getattr__(self, item):
         return self._data.get(item)
@@ -50,24 +48,10 @@ def curl(url: str, timeout: int = None, allow_redirects: bool = False) -> str:
     return r.text
 
 
-# simple function to load json
-def json_load(url):
-    if not re.match('(http|https)://', url):
-        url = 'file://' + path.abspath(url)
-    text = curl(url)
-    return json.loads(text)
-
-
-# simple function to load yaml
-def yaml_load(url):
-    if not re.match('(http|https)://', url):
-        url = 'file://' + path.abspath(url)
-    text = curl(url)
-    return yaml.safe_load(text)
-
-
-# convert raw string to filter function
-def convert2filter(raw):
+# convert string to filter function
+def str2filter(raw):
     if not raw:
+        # default filter
         return lambda _: True
+    # TODO: replace with safer operation
     return eval(raw)

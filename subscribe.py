@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 import json
-from os import path
-from copy import deepcopy
+import yaml
 
 # local modules
 import parser
@@ -20,15 +19,18 @@ from flask import render_template
 app = Flask(__name__)
 
 
-def init_config():
+def init_config() -> dict:
     with open('config.json') as f:
         config = json.load(f)
 
     for _, c in config.items():
-        c['filter'] = tk.convert2filter(c.get('filter'))
+        # set default proxies filter if empty
+        c['filter'] = tk.str2filter(c.get('filter'))
 
+        # set default policies field
         for p in c.setdefault('policies', []):
-            p.update(f=tk.convert2filter(p.get('f')))
+            # set default policy filter if empty
+            p.update(f=tk.str2filter(p.get('f')))
 
     return config
 
@@ -40,30 +42,32 @@ CONFIG = init_config()
 @app.route('/subscribe/<client>')
 def subscribe(client):
     auth = request.args.get('auth')
-    if auth not in CONFIG:
+    if auth not in CONFIG.keys():
         return jsonify({'status': False, 'message': 'Auth challenge failed.'}), 401
 
-    config = CONFIG[auth]
+    # auth -> config
+    cfg = CONFIG[auth]
 
     client = client.lower()
-    if client not in config['template']:
+    if client not in cfg['template']:
         return jsonify({'status': False, 'message': 'Client type not found.'}), 404
 
     try:
-        items = tk.yaml_load(config['link'])
+        text = tk.curl(cfg['link'], timeout=5)
+        items = yaml.safe_load(text)
         raw_proxies = items['Proxy']
     except:
         return jsonify({'status': False, 'message': 'API call failed.'}), 500
 
     # get default parser if 'parser' field is empty
-    group = policy.ProxyGroup(raw_proxies, parser.get(config.get('parser')))
+    group = policy.ProxyGroup(raw_proxies, parser.get(cfg.get('parser')))
 
-    proxies = group.get_proxies(f=config['filter'])
-    policies = (group.get_policy(**kwargs) for kwargs in config['policies'])
+    proxies = group.get_proxies(f=cfg['filter'])
+    policies = (group.get_policy(**kwargs) for kwargs in cfg['policies'])
 
     return render_template(
-        config['template'][client],
+        cfg['template'][client],
         proxies=proxies,
         policies=policies,
-        **config.get('extras', {})
+        **cfg.get('extras', {})
     )
