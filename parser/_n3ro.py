@@ -5,10 +5,13 @@ import re
 from . import base
 from . import utils
 
+
 # NAME: n3ro
 class N3RO(base.Node):
 
     def __init__(self, s):
+        super(N3RO, self).__init__(s)
+
         data = self._re_(s.upper())
         self.tag = data[0]
         self.name = data[1]

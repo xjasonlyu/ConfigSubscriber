@@ -10,7 +10,7 @@ from . import base
 from . import utils
 
 
-class __MAP__:
+class Map:
 
     def __init__(self):
         files = (path.basename(f) for f in os.listdir(path.dirname(__file__)))
@@ -28,7 +28,7 @@ class __MAP__:
             return default
 
 
-__map__ = __MAP__()
+__map__ = Map()
 
 
 def get(*args, **kwargs):
