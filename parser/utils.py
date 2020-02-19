@@ -4,26 +4,57 @@ import re
 
 
 # common region mapping
+__str2iso__ = {
+    '中': 'CN',
+    '港': 'HK',
+    '新': 'SG',
+    '美': 'US',
+    '圣': 'US',
+    '洛': 'US',
+    '台': 'TW',
+    '韩': 'KR',
+    '日': 'JP',
+    '德': 'DE',
+    '英': 'GB',
+    '法': 'FR',
+    '澳': 'AU',
+    '意': 'IT',
+    '俄': 'RU',
+    '巴': 'BR',
+    '荷': 'NL',
+    '印': 'IN',
+}
+
+
+# Chinese region name to ISO
 __region2iso__ = {
-        '港': 'HK',
-        '新': 'SG',
-        '美': 'US',
-        '圣': 'US',
-        '洛': 'US',
-        '台': 'TW',
-        '韩': 'KR',
-        '日': 'JP',
-        '德': 'DE',
-        '英': 'GB',
-        '法': 'FR',
-        '澳': 'AU',
-        '俄': 'RU',
-        '巴': 'BR',
-    }
+    '中国': 'CN',
+    '香港': 'HK',
+    '澳门': 'MO',
+    '台湾': 'TW',
+    '日本': 'JP',
+    '美国': 'US',
+    '韩国': 'KR',
+    '英国': 'GB',
+    '法国': 'FR',
+    '荷兰': 'NL',
+    '巴西': 'BR',
+    '印度': 'IN',
+    '意大利': 'IT',
+    '俄罗斯': 'RU',
+    '新加坡': 'SG',
+}
 
 
-def str2iso(name, ignore=False):
-    match = [__region2iso__[i] for i in name if i in __region2iso__]
+def replace_with_iso(name: str) -> str:
+    for country, iso_code in __region2iso__.items():
+        if country in name:
+            name = name.replace(country, iso_code)
+    return name
+
+
+def find_iso(name: str, ignore: bool = False) -> str:
+    match = [__str2iso__[i] for i in name if i in __str2iso__]
 
     if len(match) == 1:
         return match[0]
