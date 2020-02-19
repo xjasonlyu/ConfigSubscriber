@@ -24,6 +24,9 @@ class Node:
     def __getattr__(self, key):
         return self.__dict__.get(key, '')
 
+    def __gt__(self, other):
+        return str(self) > str(other)
+
 
 def nodalize(*args, **kwargs):
     return Node(*args, **kwargs)
