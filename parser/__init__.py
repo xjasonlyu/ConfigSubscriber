@@ -24,6 +24,7 @@ class Map:
         def _wrapper(name):
             try:
                 return nodalize(name)
+            # capture all exceptions
             except:
                 return base.nodalize(name)
         return _wrapper

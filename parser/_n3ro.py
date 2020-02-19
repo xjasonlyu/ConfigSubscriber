@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import re
-
 from . import base
 from . import utils
 

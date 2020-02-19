@@ -3,6 +3,7 @@
 from . import base
 from . import utils
 
+
 # NAME: rixcloud
 class RixCloud(base.Node):
 
@@ -11,7 +12,7 @@ class RixCloud(base.Node):
 
         data = self._process_(name.upper())
 
-        self.iso, self.attr , self.net, self.code = data
+        self.iso, self.attr, self.net, self.code = data
         self.flag = utils.iso2flag(self.iso)
 
     def __str__(self):

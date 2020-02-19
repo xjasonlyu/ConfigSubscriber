@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
-from . import utils
-
 
 class Node:
 
     # Base fields
-    iso = ''      # isocode: HK
+    iso = ''      # iso code: HK
     net = ''      # net: IPLC RELAY
     tag = ''      # tag: xxx
     attr = ''     # attr: xxx

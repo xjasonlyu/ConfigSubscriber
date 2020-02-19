@@ -59,7 +59,7 @@ def find_iso(name: str, ignore: bool = False) -> str:
     if len(match) == 1:
         return match[0]
     elif ignore:
-        return
+        return ''
     elif len(match) == 0:
         raise Warning(f'no region detected')
     else:
