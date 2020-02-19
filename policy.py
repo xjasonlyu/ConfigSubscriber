@@ -5,7 +5,7 @@ from toolkit import dotty
 
 class Proxy:
 
-    def __init__(self, config, parse):
+    def __init__(self, config, nodalize):
         self.name = config.get('name', '')
         self.type = config.get('type', '')
         self.server = config.get('server', '')
@@ -23,26 +23,22 @@ class Proxy:
         # self.tls = json.dumps(config.get('tls', True))
         #
         # Nodalize
-        self.node = parse(self.name)
+        self.node = nodalize(self.name)
+
+    def __str__(self):
+        return self.name
+
+    def __gt__(self, other):
+        return str(self) > str(other)
 
 
 class ProxyGroup:
 
-    def __init__(self, raw_proxies, parse):
+    def __init__(self, raw_proxies, nodalize, sort=None):
 
-        proxies = map(lambda proxy: Proxy(proxy, parse), raw_proxies)
-        proxies = list(proxies)
+        proxies = map(lambda proxy: Proxy(proxy, nodalize), raw_proxies)
 
-        regions = {}
-        for p in proxies:
-            if not regions.get(p.node.region):
-                regions[p.node.region] = [p]
-            else:
-                regions[p.node.region].append(p)
-
-        self.regions = regions
-        self.proxies = proxies
-        self.proxies.sort(key=lambda i: (i.node.tag, str(i.node)))
+        self.proxies = sorted(proxies, key=sort)
 
     def __len__(self):
         return len(self.proxies)
