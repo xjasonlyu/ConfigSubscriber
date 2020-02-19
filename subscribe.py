@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import json
 import yaml
 from requests import exceptions
@@ -32,7 +33,7 @@ app = Flask(__name__)
 
 
 def _init_config() -> dict:
-    with open('config.json') as f:
+    with open(os.environ.get('CONFIG', 'config.json')) as f:
         config = json.load(f)
 
     for _, c in config.items():
