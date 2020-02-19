@@ -32,16 +32,18 @@ class Map:
             return default
 
 
-__map__ = Map()
+_map_ = Map()
 
 
-def get(*args, **kwargs):
-    def _decorator(nodalize):
+def _override_exception(nodalize):
         def _wrapper(name):
             try:
                 return nodalize(name)
             except Exception as e:
-                raise ParseError(f'{name}: {e}')
+                raise ParseError(f'{name}: {e}') from e
         return _wrapper
 
-    return _decorator(__map__.get(*args, **kwargs))
+
+@_override_exception
+def get(*args, **kwargs):
+    return _map_.get(*args, **kwargs)
