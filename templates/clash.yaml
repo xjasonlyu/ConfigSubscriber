@@ -9,7 +9,7 @@ cfw-latency-url: http://www.gstatic.com/generate_204
 Proxy:
 {% for proxy in proxies %}  - { name: {{ proxy.node }}, type: {{ proxy.type }}, server: {{ proxy.server }}, port: {{ proxy.port }}, cipher: {{ proxy.cipher }}, password: {{ proxy.password }}, udp: {{ proxy.udp }} }
 {% endfor %}Proxy Group:
-  - { name: PROXY, type: select, proxies: [{{ names }}] }
+  - { name: PROXY, type: select, proxies: [{{ extras.get('names') }}] }
   - { name: APPLE, type: select, proxies: [PROXY, DIRECT] }
   - { name: MEDIA, type: select, proxies: [PROXY, MANUAL] }
   - { name: ADRULE, type: select, proxies: [DIRECT, REJECT] }
