@@ -98,3 +98,7 @@ def subscribe(client):
         policies=policies,
         extras=cfg.get('extras', {})
     )
+
+
+if __name__ == '__main__':
+    app.run()
