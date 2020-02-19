@@ -1,0 +1,13 @@
+[Unit]
+Description=Flask Subscribe Server
+After=network.target
+
+[Service]
+User=caddy
+Group=caddy
+WorkingDirectory=/usr/local/subscribe/
+ExecStart=/usr/local/bin/gunicorn -w 2 -b localhost:8000 subscribe:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
