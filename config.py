@@ -21,12 +21,15 @@ def init_config() -> dict:
     with open(conf_path) as f:
         config = json.load(f)
 
-    # set default values
-    config.setdefault('subscribe', {})
-    config.setdefault('templates', {})
+    # set default templates value
+    templates = config.setdefault('templates', {})
+    # lowercase all keys
+    config['templates'] = dict((k.lower(), v) for k, v in templates.items())
+    # set default subscriptions value
+    config.setdefault('subscriptions', {})
 
     # process config
-    for auth, body in config['subscribe'].items():
+    for auth, body in config['subscriptions'].items():
         if len(auth) < 8:
             raise InitError('Auth length should be at least > 8!')
 
