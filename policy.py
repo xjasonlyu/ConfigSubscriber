@@ -34,11 +34,11 @@ class Proxy:
 
 class ProxyGroup:
 
-    def __init__(self, raw_proxies, nodalize, sort=None):
+    def __init__(self, raw_proxies, f, nodalize, sort=None):
 
         proxies = map(lambda proxy: Proxy(proxy, nodalize), raw_proxies)
 
-        self.proxies = sorted(proxies, key=sort)
+        self.proxies = sorted(filter(f, proxies), key=sort)
 
     def __len__(self):
         return len(self.proxies)
@@ -46,9 +46,6 @@ class ProxyGroup:
     def __iter__(self):
         for proxy in self.proxies:
             yield proxy
-
-    def get_proxies(self, f):
-        return [proxy for proxy in filter(f, self.proxies)]
 
     def get_policy(self, f, **kwargs):
         # generate nodes field
