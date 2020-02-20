@@ -3,13 +3,13 @@
 import os
 import json
 import yaml
-from functools import wraps
-from requests import exceptions
+from requests.exceptions import RequestException
 
 # local modules
 import parser
 import policy
-import toolkit as tk
+from toolkit import *
+from exceptions import *
 
 # flask modules
 from flask import Flask
@@ -18,20 +18,8 @@ from flask import request
 from flask import render_template
 
 
-# Custom Exceptions
-# 401 Unauthorized
-class Unauthorized(Exception):
-    pass
-
-
-# 404 ClientNotFound
-class ClientNotFound(Exception):
-    pass
-
-
 # Global Flask Instance
 app = Flask(__name__)
-
 
 def _init_config() -> dict:
     with open(os.environ.get('CONFIG', 'config.json')) as f:
@@ -39,13 +27,13 @@ def _init_config() -> dict:
 
     for _, c in config.items():
         # set default func if empty
-        c['sort'] = tk.str2sort(c.get('sort'))
-        c['filter'] = tk.str2filter(c.get('filter'))
+        c['sort'] = str2sort(c.get('sort'))
+        c['filter'] = str2filter(c.get('filter'))
 
         # set default policies field
         for p in c.setdefault('policies', []):
             # set default policy filter if empty
-            p.update(f=tk.str2filter(p.get('f')))
+            p.update(f=str2filter(p.get('f')))
 
     return config
 
@@ -55,7 +43,6 @@ CONFIG = _init_config()
 
 
 def return_json_if_error_occurred(func):
-    @wraps
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -63,14 +50,14 @@ def return_json_if_error_occurred(func):
             return jsonify({'status': False, 'message': 'Auth challenge failed.'}), 401
         except ClientNotFound:
             return jsonify({'status': False, 'message': 'Client type not found.'}), 404
-        except exceptions.RequestException as e:
+        except RequestException as e:
             return jsonify({'status': False, 'message': f'Request failed: {e}.'}), 500
         except Exception as e:
             return jsonify({'status': False, 'message': f'API call failed: {e}.'}), 500
     return wrapper
 
 
-@app.route('/subscribe/<client>')
+@app.route('/subscribe/<client>', methods=['GET'])
 @return_json_if_error_occurred
 def subscribe(client):
     auth = request.args.get('auth')
@@ -84,12 +71,13 @@ def subscribe(client):
     if client not in cfg['template']:
         raise ClientNotFound()
 
-    text = tk.curl(cfg['link'], timeout=5)
+    text = curl(cfg['link'], timeout=5, allow_redirects=True)
     items = yaml.safe_load(text)
     raw_proxies = items['Proxy']
 
     # get default parser if 'parser' field is empty
-    group = policy.ProxyGroup(raw_proxies, sort=cfg.get('sort'), nodalize=parser.get(cfg.get('parser')))
+    group = policy.ProxyGroup(raw_proxies, sort=cfg.get('sort'), 
+                                nodalize=parser.get(cfg.get('parser')))
 
     proxies = group.get_proxies(f=cfg['filter'])
     policies = [group.get_policy(**kwargs) for kwargs in cfg['policies']]
@@ -97,6 +85,7 @@ def subscribe(client):
     return render_template(
         cfg['template'][client],
         url=request.url,
+        date=date(),
         proxies=proxies,
         policies=policies,
         extras=cfg.get('extras', {})
