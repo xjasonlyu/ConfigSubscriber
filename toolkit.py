@@ -3,7 +3,6 @@
 import re
 import requests
 from os import path
-from datetime import datetime
 
 
 # access dict with dot
@@ -31,11 +30,6 @@ class Dotty(dict):
 
     def __repr__(self):
         return f'Dotty(data={self._data})'
-
-
-# date e.g. 20200220
-def date():
-    return datetime.now().strftime('%Y%m%d')
 
 
 # export dotty function
