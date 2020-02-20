@@ -30,6 +30,7 @@ class Map:
         return _wrapper
 
     def __getitem__(self, key):
+        # key is case-insensitive
         nodalize = getattr(self._modules[key.upper()], 'nodalize')
         return self._exception_wrapper(nodalize)
 
