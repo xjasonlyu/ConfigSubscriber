@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 
-import os
-import json
 import yaml
+from datetime import datetime
 from requests.exceptions import RequestException
 
 # local modules
-import parser
 import policy
-from toolkit import *
 from exceptions import *
+from toolkit import curl
+from config import init_config
 
 # flask modules
 from flask import Flask
@@ -18,28 +17,9 @@ from flask import request
 from flask import render_template
 
 
-# Global Flask Instance
+# Flask APP
 app = Flask(__name__)
-
-def _init_config() -> dict:
-    with open(os.environ.get('CONFIG', 'config.json')) as f:
-        config = json.load(f)
-
-    for _, c in config.items():
-        # set default func if empty
-        c['sort'] = str2sort(c.get('sort'))
-        c['filter'] = str2filter(c.get('filter'))
-
-        # set default policies field
-        for p in c.setdefault('policies', []):
-            # set default policy filter if empty
-            p.update(f=str2filter(p.get('f')))
-
-    return config
-
-
-# read config
-CONFIG = _init_config()
+config = init_config()
 
 
 def return_json_if_error_occurred(func):
@@ -60,35 +40,35 @@ def return_json_if_error_occurred(func):
 @app.route('/subscribe/<client>', methods=['GET'])
 @return_json_if_error_occurred
 def subscribe(client):
+    # authorization check
     auth = request.args.get('auth')
-    if auth not in CONFIG.keys():
+    if auth not in config['subscriptions'].keys():
         raise Unauthorized()
 
-    # auth -> config
-    cfg = CONFIG[auth]
-
-    client = client.lower()
-    if client not in cfg['template']:
+    if client.lower() not in config['templates']:
         raise ClientNotFound()
 
+    # subscription detail config
+    cfg = config['subscriptions'][auth]
+
+    # fetch original subscription file
     text = curl(cfg['link'], timeout=5, allow_redirects=True)
+    # load from yaml text
     items = yaml.safe_load(text)
     raw_proxies = items['Proxy']
 
-    # get default parser if 'parser' field is empty
-    group = policy.ProxyGroup(raw_proxies, sort=cfg.get('sort'), 
-                                nodalize=parser.get(cfg.get('parser')))
+    group = policy.ProxyGroup(raw_proxies, sort=cfg['sort'], nodalize=cfg['parser'])
 
     proxies = group.get_proxies(f=cfg['filter'])
     policies = [group.get_policy(**kwargs) for kwargs in cfg['policies']]
 
     return render_template(
-        cfg['template'][client],
+        config['templates'][client.lower()],
         url=request.url,
-        date=date(),
+        date=datetime.now().strftime('%Y%m%d'),
         proxies=proxies,
         policies=policies,
-        extras=cfg.get('extras', {})
+        extras=cfg['extras']
     )
 
 
