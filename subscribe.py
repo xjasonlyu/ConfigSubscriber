@@ -8,6 +8,7 @@ from requests.exceptions import RequestException
 import policy
 from exceptions import *
 from toolkit import curl
+from cache import init_cache
 from config import init_config
 
 # flask modules
@@ -17,9 +18,15 @@ from flask import request
 from flask import render_template
 
 
+# Global service config
+config = init_config()
+
 # Flask APP
 app = Flask(__name__)
-config = init_config()
+
+# Flask-Caching
+cache = init_cache(config)
+cache.init_app(app)
 
 
 def return_json_if_error_occurred(func):
@@ -27,25 +34,28 @@ def return_json_if_error_occurred(func):
         try:
             return func(*args, **kwargs)
         except Unauthorized:
-            return jsonify({'status': False, 'message': 'Auth challenge failed.'}), 401
+            msg, code = 'Auth challenge failed.', 401
         except ClientNotFound:
-            return jsonify({'status': False, 'message': 'Client type not found.'}), 404
+            msg, code = 'Client type not found.', 404
         except RequestException as e:
-            return jsonify({'status': False, 'message': f'Request failed: {e}.'}), 500
+            msg, code = f'Request failed: {e}.', 500
         except Exception as e:
-            return jsonify({'status': False, 'message': f'API call failed: {e}.'}), 500
+            msg, code = f'API call failed: {e}.', 500
+        # json responses
+        return jsonify({'status': False, 'message': msg}), code
     return wrapper
 
 
 @app.route('/subscribe/<client>', methods=['GET'])
 @return_json_if_error_occurred
+@cache.cached(query_string=True)
 def subscribe(client):
     # authorization check
     auth = request.args.get('auth')
     if auth not in config['subscriptions'].keys():
         raise Unauthorized()
 
-    if client.lower() not in config['templates']:
+    if client.upper() not in config['templates']:
         raise ClientNotFound()
 
     # subscription detail config
@@ -63,7 +73,7 @@ def subscribe(client):
     policies = [group.get_policy(**kwargs) for kwargs in cfg['policies']]
 
     return render_template(
-        config['templates'][client.lower()],
+        config['templates'][client.upper()],
         url=request.url,
         date=datetime.now().strftime('%Y%m%d'),
         proxies=proxies,
