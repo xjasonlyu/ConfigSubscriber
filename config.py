@@ -6,7 +6,10 @@ import json
 import parser
 from toolkit import str2sort
 from toolkit import str2filter
-from exceptions import InitError
+
+
+class InitError(Exception):
+    pass
 
 
 def init_config() -> dict:

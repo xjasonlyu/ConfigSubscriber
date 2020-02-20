@@ -4,7 +4,7 @@ import os
 from flask_caching import Cache
 
 
-def init_cache(config: dict):
+def init_cache(app, config):
     try:
         cache_config = config['settings']['cache']
     except KeyError:
@@ -12,5 +12,8 @@ def init_cache(config: dict):
 
     # Uppercase all keys
     cache_config = dict((k.upper(), v) for k, v in cache_config.items())
-    
-    return Cache(config=cache_config)
+
+    cache = Cache(config=cache_config)
+    cache.init_app(app)
+
+    return cache
