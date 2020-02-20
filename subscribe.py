@@ -7,9 +7,10 @@ from requests.exceptions import RequestException
 
 # local modules
 import policy
-from toolkit import curl
 from cache import init_cache
 from config import init_config
+from toolkit import curl
+from toolkit import surge2clash
 
 # flask modules
 from flask import abort
@@ -67,18 +68,18 @@ def subscribe(client):
     if not items or not items.get('Proxy'):
         abort(500, 'Load proxies from YAML failed.')
 
-    group = policy.ProxyGroup(items['Proxy'], sort=cfg['sort'], nodalize=cfg['parser'])
+    group = policy.ProxyGroup(items['Proxy'], f=cfg['filter'], sort=cfg['sort'], nodalize=cfg['parser'])
 
-    proxies = group.get_proxies(f=cfg['filter'])
     policies = [group.get_policy(**kwargs) for kwargs in cfg['policies']]
 
     return render_template(
         config['templates'][client.upper()],
         url=request.url,
         date=datetime.now().strftime('%Y%m%d'),
-        proxies=proxies,
+        proxies=group.proxies,
         policies=policies,
-        extras=cfg['extras']
+        extras=cfg['extras'],
+        surge2clash=surge2clash
     )
 
 

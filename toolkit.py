@@ -74,3 +74,45 @@ def str2sort(raw):
         return None
     # TODO: replace with safer operation
     return lambda p: eval(raw)
+
+
+# Generator
+# convert Surge rules to Clash rules
+def surge2clash(*urls):
+    t = ('DOMAIN', 'DOMAIN-KEYWORD', 'DOMAIN-SUFFIX', 'IP-CIDR', 'GEOIP')
+    m = {'SRC-IP': 'SRC-IP-CIDR', 'DEST-PORT': 'DST-PORT', 'IN-PORT': 'SRC-PORT'}
+    # fetch rules
+    rules = '\n'.join(curl(url, timeout=5, allow_redirects=True) for url in urls)
+
+    for rule in rules.splitlines():
+        # ignore empty line or comment
+        if not rule or rule.startswith('#'):
+            continue
+
+        _rule = [i.strip() for i in rule.split(',')]
+        if len(_rule) == 2:
+            _rule.append('')
+
+        # set values
+        if len(_rule) == 3:
+            _type, _value, _attr = _rule
+        elif len(_rule) == 4:
+            _type, _value, _policy, _attr = _rule
+        else:
+            # maybe an error, ignore
+            continue
+
+        # concat
+        if _type in t:
+            _data = f'{_type},{_value},{{}}'
+        # replace
+        elif _type in m:
+            _data = f'{m[_type]},{_value},{{}}'
+        else:
+            continue
+
+        # clash only support 'no-resolve' param
+        if _attr == 'no-resolve':
+            yield f'{_data},{_attr}'
+        else:
+            yield _data
