@@ -2,7 +2,6 @@
 
 import re
 import requests
-from os import path
 
 
 # access dict with dot
@@ -47,8 +46,6 @@ def curl(url: str, timeout: int = None, allow_redirects: bool = False) -> str:
     # file protocol
     if url.startswith('file://'):
         url = url[7:]
-        if not path.exists(url):
-            return ''
         with open(url, 'r') as f:
             return f.read()
     # curl headers
