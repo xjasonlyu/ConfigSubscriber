@@ -5,8 +5,8 @@ After=network.target
 [Service]
 User=caddy
 Group=caddy
-WorkingDirectory=/usr/local/subscribe/
-ExecStart=/usr/local/bin/gunicorn -w 2 -b localhost:8000 subscribe:app
+WorkingDirectory=/usr/local/bin/subscribe/
+ExecStart=/usr/local/bin/gunicorn -b localhost:9000 -e CONFIG=/etc/subscribe/config.json -w 3 subscribe:app
 Restart=always
 
 [Install]
