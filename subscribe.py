@@ -3,6 +3,7 @@
 import os
 import json
 import yaml
+from functools import wraps
 from requests import exceptions
 
 # local modules
@@ -54,6 +55,7 @@ CONFIG = _init_config()
 
 
 def return_json_if_error_occurred(func):
+    @wraps
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)

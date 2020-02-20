@@ -3,6 +3,7 @@
 import re
 import os
 from os import path
+from functools import wraps
 from importlib import import_module
 
 # builtin packages
@@ -21,6 +22,7 @@ class Map:
     @staticmethod
     def _exception_wrapper(nodalize):
         # return base if error occurred
+        @wraps
         def _wrapper(name):
             try:
                 return nodalize(name)
