@@ -5,7 +5,6 @@ mode: Rule
 log-level: info
 external-controller: 127.0.0.1:9090
 cfw-latency-url: http://www.gstatic.com/generate_204
-# Proxy & Group
 Proxy:
 {% for proxy in proxies %}  - { name: {{ proxy.node }}, type: {{ proxy.type }}, server: {{ proxy.server }}, port: {{ proxy.port }}, cipher: {{ proxy.cipher }}, password: {{ proxy.password }}, udp: {{ proxy.udp }} }
 {% endfor %}Proxy Group:
