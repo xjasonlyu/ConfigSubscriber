@@ -6,10 +6,13 @@ log-level: info
 external-controller: 127.0.0.1:9090
 cfw-latency-url: http://www.gstatic.com/generate_204
 Proxy:
+{%- block proxy %}
 {%- for proxy in proxies %}
   - { name: {{ proxy.node }}, type: {{ proxy.type }}, server: {{ proxy.server }}, port: {{ proxy.port }}, cipher: {{ proxy.cipher }}, password: {{ proxy.password }}, udp: {{ proxy.udp }} }
 {%- endfor %}
+{%- endblock %}
 Proxy Group:
+{%- block proxy_group %}
   - { name: PROXY, type: select, proxies: [{{ extras.names }}] }
   - { name: APPLE, type: select, proxies: [PROXY, DIRECT] }
   - { name: MEDIA, type: select, proxies: [PROXY, MANUAL] }
@@ -19,6 +22,7 @@ Proxy Group:
 {%- for policy in policies %}
   - { name: {{ policy.name }}, type: {{ policy.type }}, proxies: [{{ policy.nodes }}]{% for k, v in policy.attrs.items() %}, {{ k }}: {{ v }}{% endfor %} }
 {%- endfor %}
+{%- endblock %}
 Rule:
   # Custom Rules
   - DOMAIN-SUFFIX,12x.me,MYRULE
