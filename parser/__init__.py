@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import re
 import os
@@ -7,7 +8,6 @@ from importlib import import_module
 
 # builtin packages
 from . import base
-from . import utils
 
 
 class Map:
