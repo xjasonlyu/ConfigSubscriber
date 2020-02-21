@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import re
-from subscribe.parser import base
-from subscribe.parser import utils
+from . import base
+from . import utils
 
 
 # NAME: n3ro

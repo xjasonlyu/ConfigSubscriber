@@ -7,7 +7,7 @@ from os import path
 from importlib import import_module
 
 # builtin packages
-from subscribe.parser import base
+from . import base
 
 
 class Map:

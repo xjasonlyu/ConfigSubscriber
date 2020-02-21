@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from subscribe.parser import base
-from subscribe.parser import utils
+from . import base
+from . import utils
 
 
 # NAME: rixCloud

@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from subscribe import app
-from subscribe import cache
-from subscribe import config
+# Package variables
+from . import app
+from . import cache
+from . import config
 
 # local modules
-from subscribe import policy
-from subscribe.toolkit import fetch_url
-from subscribe.toolkit import surge2clash
+from . import policy
+from .toolkit import fetch_url
+from .filters import surge2clash
 
 # flask modules
 from flask import abort

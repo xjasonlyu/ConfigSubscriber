@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from subscribe.parser.utils import find_iso
-from subscribe.parser.utils import flag2iso
-from subscribe.parser.utils import iso2flag
+from .utils import find_iso
+from .utils import flag2iso
+from .utils import iso2flag
 
 
 class Node:

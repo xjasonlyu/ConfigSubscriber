@@ -5,8 +5,8 @@ from flask import Flask
 from importlib import import_module
 
 # Package Import
-from subscribe.cache import init_cache
-from subscribe.config import init_config
+from .cache import init_cache
+from .config import init_config
 
 # Init Flask App
 app = Flask(__name__)
