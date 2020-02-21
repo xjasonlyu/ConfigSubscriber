@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import re
 from . import base
 from . import utils
 
@@ -19,10 +20,15 @@ class N3RO(base.Node):
         return f'{self.flag}{self.name}-{self.net}-{self.code}'
 
     @staticmethod
-    def _process_(s):
+    def _process_(s: str) -> list:
         s = s.replace('中继', 'RELAY')
         s = s.replace('专线', 'IPLC')
         s = s.replace(' → ', '→')
+
+        # add id code
+        if not re.match('\d{2}', s[-2:]):
+            s += ' ' + '01'
+
         return s.split()
 
 

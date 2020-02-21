@@ -16,7 +16,7 @@ class RixCloud(base.Node):
         return f'{self.flag}{self.iso}-{self.attr}-{self.net}-{self.code}'
 
     @staticmethod
-    def _process_(s):
+    def _process_(s: str) -> list:
         # special replacement
         if 'NETEASE' in s:
             raise Warning('ignore netease node')
