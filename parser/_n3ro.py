@@ -14,7 +14,13 @@ class N3RO(base.Node):
         data = self._process_(name.upper())
 
         self.net, self.name, self.code = data
-        self.iso = utils.find_iso(data[1][data[1].find('→'):])
+
+        offset = self.name.find('→')
+        if offset > 0:
+            # for accurate ISO code inspection
+            self.iso = utils.find_iso(self.name[offset:])
+        else:
+            self.iso = utils.find_iso(self.name)
 
     def __str__(self):
         return f'{self.flag}{self.name}-{self.net}-{self.code}'

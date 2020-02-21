@@ -60,6 +60,11 @@ def surge2clash(policy, *urls):
         if not rule or rule.startswith('#'):
             continue
 
+        offset = rule.find('#')
+        if offset > -1:
+            # remove inline comment
+            rule = rule[:offset]
+
         _rule = [i.strip() for i in rule.split(',')]
         # set values
         if len(_rule) == 2:
