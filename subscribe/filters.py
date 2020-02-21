@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from . import app
-from .toolkit import fetch_url
+from .utils import fetch_url
 
 
 # Generator: convert Surge rules to Clash rules

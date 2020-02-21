@@ -5,8 +5,8 @@ import os
 import json
 
 from . import parser
-from .toolkit import str2sort
-from .toolkit import str2filter
+from .utils import str2sort
+from .utils import str2filter
 
 
 class InitError(Exception):

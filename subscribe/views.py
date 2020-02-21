@@ -8,7 +8,7 @@ from . import config
 
 # local modules
 from . import policy
-from .toolkit import fetch_url
+from .utils import fetch_url
 
 # flask modules
 from flask import abort
