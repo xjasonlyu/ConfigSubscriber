@@ -1,5 +1,3 @@
-#Version {{ date }}
-
 port: 1090
 socks-port: 1080
 allow-lan: false
@@ -8,30 +6,44 @@ log-level: info
 external-controller: 127.0.0.1:9090
 cfw-latency-url: http://www.gstatic.com/generate_204
 Proxy:
-{% for proxy in proxies %}  - { name: {{ proxy.node }}, type: {{ proxy.type }}, server: {{ proxy.server }}, port: {{ proxy.port }}, cipher: {{ proxy.cipher }}, password: {{ proxy.password }}, udp: {{ proxy.udp }} }
-{% endfor %}Proxy Group:
-  - { name: PROXY, type: select, proxies: [{{ extras.get('names') }}] }
+{%- for proxy in proxies %}
+  - { name: {{ proxy.node }}, type: {{ proxy.type }}, server: {{ proxy.server }}, port: {{ proxy.port }}, cipher: {{ proxy.cipher }}, password: {{ proxy.password }}, udp: {{ proxy.udp }} }
+{%- endfor %}
+Proxy Group:
+  - { name: PROXY, type: select, proxies: [{{ extras.names }}] }
   - { name: APPLE, type: select, proxies: [PROXY, DIRECT] }
   - { name: MEDIA, type: select, proxies: [PROXY, MANUAL] }
   - { name: ADRULE, type: select, proxies: [DIRECT, REJECT] }
   - { name: CNRULE, type: select, proxies: [DIRECT{% for proxy in proxies %}{% if proxy.node.iso == 'CN' %}, {{ proxy.node }}{% endif %}{% endfor %}] }
   - { name: MYRULE, type: select, proxies: [DIRECT, PROXY] }
-{% for policy in policies %}  - { name: {{ policy.name }}, type: {{ policy.type }}, proxies: [{{ policy.nodes }}]{% for k, v in policy.attrs.items() %}, {{ k }}: {{ v }}{% endfor %} }
-{% endfor %}Rule:
+{%- for policy in policies %}
+  - { name: {{ policy.name }}, type: {{ policy.type }}, proxies: [{{ policy.nodes }}]{% for k, v in policy.attrs.items() %}, {{ k }}: {{ v }}{% endfor %} }
+{%- endfor %}
+Rule:
   # Custom Rules
   - DOMAIN-SUFFIX,12x.me,MYRULE
   - DOMAIN-SUFFIX,xjasonlyu.com,MYRULE
   # Reject List
-{% for rule in surge2clash('https://ruleset.dev/surge3_reject', 'https://ruleset.dev/surge3_reject-tinygif') %}  - {{ rule.format('ADRULE') }}
-{% endfor %}  # Media Services
-{% for rule in surge2clash('https://ruleset.dev/surge3_stream_services') %}  - {{ rule.format('MEDIA') }}
-{% endfor %}  # Apple Services
-{% for rule in surge2clash('https://ruleset.dev/surge3_apple_services') %}  - {{ rule.format('APPLE') }}
-{% endfor %}  # Global Proxy
-{% for rule in surge2clash('https://ruleset.dev/surge3_global_plus', 'https://ruleset.dev/surge3_global') %}  - {{ rule.format('PROXY') }}
-{% endfor %}  # China Sites
-{% for rule in surge2clash('https://ruleset.dev/surge3_domestic') %}  - {{ rule.format('CNRULE') }}
-{% endfor %}  # Private Network
+{%- for rule in surge2clash('https://ruleset.dev/surge3_reject', 'https://ruleset.dev/surge3_reject-tinygif') %}
+  - {{ rule.format('ADRULE') }}
+{%- endfor %}
+  # Media Services
+{%- for rule in surge2clash('https://ruleset.dev/surge3_stream_services') %}
+  - {{ rule.format('MEDIA') }}
+{%- endfor %}
+  # Apple Services
+{%- for rule in surge2clash('https://ruleset.dev/surge3_apple_services') %}
+  - {{ rule.format('APPLE') }}
+{%- endfor %}
+  # Global Proxy
+{%- for rule in surge2clash('https://ruleset.dev/surge3_global_plus', 'https://ruleset.dev/surge3_global') %}
+  - {{ rule.format('PROXY') }}
+{%- endfor %}
+  # China Sites
+{%- for rule in surge2clash('https://ruleset.dev/surge3_domestic') %}
+  - {{ rule.format('CNRULE') }}
+{%- endfor %}
+  # Private Network
   - DOMAIN-SUFFIX,local,DIRECT
   - IP-CIDR,127.0.0.0/8,DIRECT
   - IP-CIDR,172.16.0.0/12,DIRECT

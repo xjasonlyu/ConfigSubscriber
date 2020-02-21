@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from toolkit import dotty
-
 
 class Proxy:
 
@@ -54,4 +52,4 @@ class ProxyGroup:
         kwargs.setdefault('attrs', {})
         # update nodes to kwargs
         kwargs.update(nodes=nodes)
-        return dotty(kwargs)
+        return kwargs

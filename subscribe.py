@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import yaml
-from datetime import datetime
 from werkzeug.exceptions import HTTPException
 from requests.exceptions import RequestException
 
@@ -9,7 +8,7 @@ from requests.exceptions import RequestException
 import policy
 from cache import init_cache
 from config import init_config
-from toolkit import curl
+from toolkit import fetch_url
 from toolkit import surge2clash
 
 # flask modules
@@ -40,7 +39,7 @@ def return_json_if_error_occurred(e):
     elif isinstance(e, yaml.YAMLError):
         message, code = f'Parse YAML file error.', 500
     elif isinstance(e, (FileNotFoundError, RequestException)):
-        message, code = f'CURL failed: {e}.', 500
+        message, code = f'Fetch URL failed: {e}.', 500
     else:
         message, code = f'API call failed: {e}.', 500
     # JSON responses
@@ -62,7 +61,7 @@ def subscribe(client):
     cfg = config['subscriptions'][auth]
 
     # fetch original subscription file
-    text = curl(cfg['link'], timeout=5, allow_redirects=True)
+    text = fetch_url(cfg['link'])
     # load from yaml text
     items = yaml.safe_load(text)
     if not items or not items.get('Proxy'):
@@ -75,7 +74,6 @@ def subscribe(client):
     return render_template(
         config['templates'][client.upper()],
         url=request.url,
-        date=datetime.now().strftime('%Y%m%d'),
         proxies=group.proxies,
         policies=policies,
         extras=cfg['extras'],
