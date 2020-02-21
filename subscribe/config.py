@@ -4,9 +4,9 @@
 import os
 import json
 
-import parser
-from toolkit import str2sort
-from toolkit import str2filter
+from subscribe import parser
+from subscribe.toolkit import str2sort
+from subscribe.toolkit import str2filter
 
 
 class InitError(Exception):

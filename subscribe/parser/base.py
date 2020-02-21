@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .utils import *
+from subscribe.parser.utils import find_iso
+from subscribe.parser.utils import flag2iso
+from subscribe.parser.utils import iso2flag
 
 
 class Node:
@@ -48,7 +50,6 @@ class Node:
             self._iso = iso
             self._flag = flag
 
-
     @property
     def flag(self):
         if self._flag is None:
@@ -61,7 +62,7 @@ class Node:
         if self._flag == flag:
             return
 
-        iso = flag2iso(value)
+        iso = flag2iso(flag)
         if iso:
             self._iso = iso
             self._flag = flag

@@ -1,33 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import yaml
-from werkzeug.exceptions import HTTPException
-from requests.exceptions import RequestException
+from subscribe import app
+from subscribe import cache
+from subscribe import config
 
 # local modules
-import policy
-from cache import init_cache
-from config import init_config
-from toolkit import fetch_url
-from toolkit import surge2clash
+from subscribe import policy
+from subscribe.toolkit import fetch_url
+from subscribe.toolkit import surge2clash
 
 # flask modules
 from flask import abort
-from flask import Flask
 from flask import jsonify
 from flask import request
 from flask import render_template
 
-
-# Global service config
-config = init_config()
-
-# Flask APP
-app = Flask(__name__)
-
-# Flask-Caching
-cache = init_cache(app, config)
+import yaml
+from werkzeug.exceptions import HTTPException
+from requests.exceptions import RequestException
 
 
 @app.errorhandler(Exception)
@@ -79,7 +70,3 @@ def subscribe(client):
         extras=cfg['extras'],
         surge2clash=surge2clash
     )
-
-
-if __name__ == '__main__':
-    app.run()

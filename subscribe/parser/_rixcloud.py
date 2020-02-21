@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from . import base
-from . import utils
+from subscribe.parser import base
+from subscribe.parser import utils
 
 
-# NAME: rixcloud
+# NAME: rixCloud
 class RixCloud(base.Node):
 
     def __init__(self, name):
         super(RixCloud, self).__init__(name)
 
-        self.iso, self.attr, self.net, self.code = self._process_(name.upper())
+        data = self._process_(name.upper())
+
+        self.iso, self.attr, self.net, self.code = data
 
     def __str__(self):
         return f'{self.flag}{self.iso}-{self.attr}-{self.net}-{self.code}'

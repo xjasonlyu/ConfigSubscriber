@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import re
-from . import base
-from . import utils
+from subscribe.parser import base
+from subscribe.parser import utils
 
 
 # NAME: n3ro
@@ -33,7 +33,7 @@ class N3RO(base.Node):
         s = s.replace(' → ', '→')
 
         # add id code
-        if not re.match('\d{2}', s[-2:]):
+        if not re.match(r'\d{2}', s[-2:]):
             s += ' ' + '01'
 
         return s.split()

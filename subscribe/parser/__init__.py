@@ -7,7 +7,7 @@ from os import path
 from importlib import import_module
 
 # builtin packages
-from . import base
+from subscribe.parser import base
 
 
 class Map:
@@ -16,7 +16,7 @@ class Map:
         files = (path.basename(f) for f in os.listdir(path.dirname(__file__)))
         modules = filter(lambda f: re.match(r'_[a-zA-Z0-9]+\.py', f), files)
         # import modules & convert to dict
-        self._modules = dict([(m[1:-3].upper(), import_module('.'+m[:-3], __name__)) for m in modules])
+        self._modules = dict([(m[1:-3].upper(), import_module(f'{__name__}.{m[:-3]}')) for m in modules])
 
     @staticmethod
     def _exception_wrapper(nodalize):
