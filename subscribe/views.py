@@ -9,7 +9,6 @@ from . import config
 # local modules
 from . import policy
 from .toolkit import fetch_url
-from .filters import surge2clash
 
 # flask modules
 from flask import abort
@@ -68,6 +67,5 @@ def subscribe(client):
         config['templates'][client.upper()],
         proxies=group.proxies,
         policies=policies,
-        extras=cfg['extras'],
-        surge2clash=surge2clash
+        extras=cfg['extras']
     )
