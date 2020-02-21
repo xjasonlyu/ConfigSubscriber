@@ -8,7 +8,7 @@ cfw-latency-url: http://www.gstatic.com/generate_204
 Proxy:
 {%- block proxy %}
 {%- for proxy in proxies %}
-  - { name: {{ proxy.node }}, type: {{ proxy.type }}, server: {{ proxy.server }}, port: {{ proxy.port }}, cipher: {{ proxy.cipher }}, password: {{ proxy.password }}, udp: {{ proxy.udp }} }
+  - { name: {{ proxy.node }}, type: {{ proxy.type }}, server: {{ proxy.server }}, port: {{ proxy.port }}, cipher: {{ proxy.cipher }}, password: {{ proxy.password }}, udp: {{ proxy.udp | lower }} }
 {%- endfor %}
 {%- endblock %}
 Proxy Group:

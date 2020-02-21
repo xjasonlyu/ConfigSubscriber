@@ -73,7 +73,6 @@ def subscribe(client):
 
     return render_template(
         config['templates'][client.upper()],
-        url=request.url,
         proxies=group.proxies,
         policies=policies,
         extras=cfg['extras'],

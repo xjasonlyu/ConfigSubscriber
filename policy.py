@@ -12,7 +12,7 @@ class Proxy:
         # ss
         self.password = config.get('password', '')
         # default enable udp
-        self.udp = str(config.get('udp', True)).lower()
+        self.udp = config.get('udp', True)
         # TODO: support vmess & other protocols
         # self.uuid = config.get('uuid', '')
         # self.alterId = config.get('alterId', '')
@@ -40,10 +40,6 @@ class ProxyGroup:
 
     def __len__(self):
         return len(self.proxies)
-
-    def __iter__(self):
-        for proxy in self.proxies:
-            yield proxy
 
     def get_policy(self, f, **kwargs):
         # generate nodes field

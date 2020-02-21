@@ -1,4 +1,4 @@
-#!MANAGED-CONFIG {{ url }} interval={{ extras.interval|d(259200) }} strict=true
+#!MANAGED-CONFIG {{ request.url }} interval={{ extras.interval|d(259200) }} strict=true
 
 [General]
 loglevel = warning
@@ -19,7 +19,7 @@ show-error-page-for-reject = true
 [Proxy]
 {%- block proxy %}
 {%- for proxy in proxies %}
-{{ proxy.node }} = {{ proxy.type }}, {{ proxy.server }}, {{ proxy.port }}, encrypt-method={{ proxy.cipher }}, password={{ proxy.password }}, udp-relay={{ proxy.udp }}
+{{ proxy.node }} = {{ proxy.type }}, {{ proxy.server }}, {{ proxy.port }}, encrypt-method={{ proxy.cipher }}, password={{ proxy.password }}, udp-relay={{ proxy.udp | lower }}
 {%- endfor %}
 {%- endblock %}
 
