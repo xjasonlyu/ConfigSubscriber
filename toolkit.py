@@ -45,7 +45,7 @@ def str2sort(raw):
 
 # Generator
 # convert Surge rules to Clash rules
-def surge2clash(*urls):
+def surge2clash(policy, *urls):
     t = ('DOMAIN', 'DOMAIN-KEYWORD', 'DOMAIN-SUFFIX', 'IP-CIDR', 'GEOIP')
     m = {'SRC-IP': 'SRC-IP-CIDR', 'DEST-PORT': 'DST-PORT', 'IN-PORT': 'SRC-PORT'}
     # fetch rules via url
@@ -74,10 +74,10 @@ def surge2clash(*urls):
 
         # concat
         if _type in t:
-            _data = f'{_type},{_value},{{}}'
+            _data = f'{_type},{_value},{policy}'
         # replace
         elif _type in m:
-            _data = f'{m[_type]},{_value},{{}}'
+            _data = f'{m[_type]},{_value},{policy}'
         else:
             continue
 
