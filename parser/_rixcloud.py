@@ -10,10 +10,7 @@ class RixCloud(base.Node):
     def __init__(self, name):
         super(RixCloud, self).__init__(name)
 
-        data = self._process_(name.upper())
-
-        self.iso, self.attr, self.net, self.code = data
-        self.flag = utils.iso2flag(self.iso)
+        self.iso, self.attr, self.net, self.code = self._process_(name.upper())
 
     def __str__(self):
         return f'{self.flag}{self.iso}-{self.attr}-{self.net}-{self.code}'

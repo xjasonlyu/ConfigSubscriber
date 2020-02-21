@@ -11,9 +11,9 @@ class N3RO(base.Node):
         super(N3RO, self).__init__(name)
 
         data = self._process_(name.upper())
+
         self.net, self.name, self.code = data
         self.iso = utils.find_iso(data[1][data[1].find('→'):])
-        self.flag = utils.iso2flag(self.iso)
 
     def __str__(self):
         return f'{self.flag}{self.name}-{self.net}-{self.code}'

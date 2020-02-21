@@ -67,7 +67,27 @@ def find_iso(name: str, ignore: bool = False) -> str:
 
 
 def iso2flag(iso: str) -> str:
-    return flagize(f':{iso}:')
+    if len(iso) != 2:
+        return ''
+
+    flag = flagize(f':{iso}:')
+
+    if flag.startswith(':'):
+        # flagize failed
+        return ''
+    return flag
+
+
+def flag2iso(flag: str) -> str:
+    if len(flag) != 2:
+        return ''
+
+    iso = dflagize(flag)
+
+    if iso == flag:
+        # dflagize failed
+        return ''
+    return iso.strip(':')
 
 
 def flagize(text: str) -> str:
