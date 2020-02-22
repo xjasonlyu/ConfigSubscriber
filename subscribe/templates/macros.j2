@@ -1,0 +1,25 @@
+{# Macro functions #}
+
+{# proxies variable #}
+{% set proxies = cfg.link | get_proxies(cfg.parser, cfg.filter, cfg.sort) %}
+
+{# policies variable #}
+{% set policies = proxies | get_policies(cfg.policies) %}
+
+{# marshal_proxy #}
+{%- macro marshal_proxy(proxy, client='clash') %}
+{%- if client == 'clash' %}
+  - { name: {{ proxy.node }}, type: {{ proxy.type }}, server: {{ proxy.server }}, port: {{ proxy.port }}, cipher: {{ proxy.cipher }}, password: {{ proxy.password }}, udp: {{ proxy.udp | lower }} }
+{%- elif client == 'surge' %}
+{{ proxy.node }} = {{ proxy.type }}, {{ proxy.server }}, {{ proxy.port }}, encrypt-method={{ proxy.cipher }}, password={{ proxy.password }}, udp-relay={{ proxy.udp | lower }}
+{%- endif %}
+{%- endmacro %}
+
+{# marshal_policy #}
+{%- macro marshal_policy(policy, client='clash') %}
+{%- if client == 'clash' %}
+  - { name: {{ policy.name }}, type: {{ policy.type }}, proxies: [{{ policy.proxies }}]{% for k, v in policy.attrs.items() %}, {{ k }}: {{ v }}{% endfor %} }
+{%- elif client == 'surge' %}
+{{ policy.name }} = {{ policy.type }}, {{ policy.proxies }}{% for k, v in policy.attrs.items() %}, {{ k }}={{ v }}{% endfor %}
+{%- endif %}
+{%- endmacro %}

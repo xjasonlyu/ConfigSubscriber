@@ -2,26 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import re
-import requests
-
-
-# simple url fetcher
-def fetch_url(url: str, timeout: int = 5, allow_redirects: bool = True) -> str:
-    # process URL
-    if not re.match('(http|https|file)://', url):
-        url = 'http://' + url
-    # file protocol
-    if url.startswith('file://'):
-        url = url[7:]
-        with open(url, 'r') as f:
-            return f.read()
-    # request headers
-    headers = {
-        'Accept': '*/*'
-    }
-    r = requests.get(url, headers=headers, timeout=timeout, allow_redirects=allow_redirects)
-    r.raise_for_status()
-    return r.text
 
 
 # convert string to filter function

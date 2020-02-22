@@ -1,10 +1,63 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# Package Flask App
 from . import app
-from .utils import fetch_url
 
+import re
+import yaml
+import requests
 from jinja2.utils import soft_unicode
+
+
+class Proxy:
+
+    def __init__(self, config, nodalize):
+        self.name = config.get('name', '')
+        # only ss support yet
+        self.type = config.get('type', '')
+        self.server = config.get('server', '')
+        self.port = config.get('port', 0)
+        self.password = config.get('password', '')
+        # default enable udp
+        self.udp = config.get('udp-relay') or config.get('udp', True)
+        # encrypt method or cipher
+        self.cipher = config.get('encrypt-method') or config.get('cipher', '')
+        # TODO: support vmess & other protocols
+        # self.uuid = config.get('uuid', '')
+        # self.alterId = config.get('alterId', '')
+        # self.username = config.get('username', '')
+        # # default disable tls
+        # self.tls = json.dumps(config.get('tls', True))
+        #
+        # Nodalize
+        self.node = nodalize(self.name)
+
+    def __str__(self):
+        return self.name
+
+    def __gt__(self, other):
+        return str(self) > str(other)
+
+
+# simple url fetcher
+@app.template_filter()
+def fetch_url(url: str, timeout: int = 5, allow_redirects: bool = True) -> str:
+    # process URL
+    if not re.match('(http|https|file)://', url):
+        url = 'http://' + url
+    # file protocol
+    if url.startswith('file://'):
+        url = url[7:]
+        with open(url, 'r') as f:
+            return f.read()
+    # request headers
+    headers = {
+        'Accept': '*/*'
+    }
+    r = requests.get(url, headers=headers, timeout=timeout, allow_redirects=allow_redirects)
+    r.raise_for_status()
+    return r.text
 
 
 # Format sequence to string
@@ -12,6 +65,37 @@ from jinja2.utils import soft_unicode
 def format_seq(seq, fmt, concat='', **kwargs):
     # format & concat
     return concat.join(soft_unicode(fmt).format(text, **kwargs) for text in seq)
+
+
+@app.template_filter()
+def get_proxies(link, parser, f, sort=None):
+    def p(d):
+
+        return d
+    # fetch original subscription file
+    text = fetch_url(link)
+    # TODO: support other kind configs
+    # load from yaml text
+    items = yaml.safe_load(text)
+    raw_proxies = items.get('Proxy')
+    # proxy node parser
+    proxies = (Proxy(proxy, parser) for proxy in raw_proxies)
+
+    return sorted(filter(f, proxies), key=sort)
+
+
+@app.template_filter()
+def get_policies(proxies, config):
+    def get_policy(f, **kwargs):
+        # generate nodes field
+        nodes = ', '.join(str(p.node) for p in filter(f, proxies))
+        # set default for attrs
+        kwargs.setdefault('attrs', {})
+        # update nodes to kwargs
+        kwargs.update(proxies=nodes)
+        return kwargs
+
+    return [get_policy(**kwargs) for kwargs in config]
 
 
 # Generator: convert Surge rules to Clash rules

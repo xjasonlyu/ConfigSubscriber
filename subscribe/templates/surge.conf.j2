@@ -1,4 +1,5 @@
-#!MANAGED-CONFIG {{ request.url }} interval={{ extras.interval|d(259200) }} strict=true
+{%- import 'macros.j2' as macros with context -%}
+#!MANAGED-CONFIG {{ request.url }} interval={{ cfg.extras.interval|d(259200) }} strict=true
 
 [General]
 loglevel = warning
@@ -18,21 +19,21 @@ show-error-page-for-reject = true
 
 [Proxy]
 {%- block proxy %}
-{%- for proxy in proxies %}
-{{ proxy.node }} = {{ proxy.type }}, {{ proxy.server }}, {{ proxy.port }}, encrypt-method={{ proxy.cipher }}, password={{ proxy.password }}, udp-relay={{ proxy.udp | lower }}
+{%- for proxy in macros.proxies %}
+{{- macros.marshal_proxy(proxy, client='surge') }}
 {%- endfor %}
 {%- endblock %}
 
 [Proxy Group]
 {%- block proxy_group %}
-PROXY = select, {{ extras.names }}
+PROXY = select, {{ cfg.extras.names }}
 APPLE = select, PROXY, DIRECT
 MEDIA = select, PROXY, MANUAL
 ADRULE = select, DIRECT, REJECT, REJECT-TINYGIF
-CNRULE = select, DIRECT{% for proxy in proxies %}{% if proxy.node.iso == 'CN' %}, {{ proxy.node }}{% endif %}{% endfor %}
+CNRULE = select, DIRECT{% for proxy in macros.proxies %}{% if proxy.node.iso == 'CN' %}, {{ proxy.node }}{% endif %}{% endfor %}
 MYRULE = select, DIRECT, PROXY
-{%- for policy in policies %}
-{{ policy.name }} = {{ policy.type }}, {{ policy.nodes }}{% for k, v in policy.attrs.items() %}, {{ k }}={{ v }}{% endfor %}
+{%- for policy in macros.policies %}
+{{- macros.marshal_policy(policy, client='surge') }}
 {%- endfor %}
 {%- endblock %}
 
