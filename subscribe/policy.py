@@ -6,14 +6,15 @@ class Proxy:
 
     def __init__(self, config, nodalize):
         self.name = config.get('name', '')
+        # only ss support yet
         self.type = config.get('type', '')
         self.server = config.get('server', '')
         self.port = config.get('port', 0)
-        self.cipher = config.get('cipher', '')
-        # ss
         self.password = config.get('password', '')
         # default enable udp
-        self.udp = config.get('udp', True)
+        self.udp = config.get('udp-relay') or config.get('udp', True)
+        # encrypt method or cipher
+        self.cipher = config.get('encrypt-method') or config.get('cipher', '')
         # TODO: support vmess & other protocols
         # self.uuid = config.get('uuid', '')
         # self.alterId = config.get('alterId', '')
