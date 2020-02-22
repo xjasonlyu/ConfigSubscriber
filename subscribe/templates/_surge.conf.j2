@@ -1,0 +1,57 @@
+#!MANAGED-CONFIG {{ request.url }} interval={{ cfg.extras.interval|d(259200) }} strict=true
+
+[General]
+loglevel = warning
+ipv6 = false
+replica = false
+bypass-system = true
+skip-proxy = 127.0.0.0/8, 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8, 169.254.0.0/16, 100.64.0.0/10, 198.18.0.0/15, 255.255.255.255/32, 2.2.2.2/32, e.crashlytics.com, captive.apple.com
+dns-server = 223.5.5.5, 1.2.4.8, 1.1.1.1, system
+http-listen = 127.0.0.1:1090
+socks5-listen = 127.0.0.1:1080
+internet-test-url = http://www.aliyun.com/
+proxy-test-url = http://www.gstatic.com/generate_204
+test-timeout = 5
+allow-wifi-access = false
+exclude-simple-hostnames = true
+show-error-page-for-reject = true
+
+[Proxy]
+{%- block proxy %}
+{%- endblock %}
+
+[Proxy Group]
+{%- block proxy_group %}
+{%- endblock %}
+
+[Rule]
+# Custom Rules
+// RULE-SET,RULE/PROCESS,DIRECT
+RULE-SET,RULE/MINE.rule,MYRULE
+RULE-SET,RULE/PROXY.rule,PROXY
+RULE-SET,RULE/REJECT.rule,REJECT
+RULE-SET,RULE/DIRECT.rule,DIRECT
+# Reject List
+RULE-SET,https://ruleset.dev/surge3_reject,ADRULE
+RULE-SET,https://ruleset.dev/surge3_reject-tinygif,ADRULE
+# Media Services
+RULE-SET,https://ruleset.dev/surge3_stream_services,MEDIA
+# Apple Services
+RULE-SET,https://ruleset.dev/surge3_apple_services,APPLE
+# Global Proxy
+RULE-SET,https://ruleset.dev/surge3_global_plus,PROXY
+RULE-SET,https://ruleset.dev/surge3_global,PROXY
+# China Sites
+RULE-SET,https://ruleset.dev/surge3_domestic,CNRULE
+# Private Network
+RULE-SET,LAN,DIRECT
+# GeoIP CN
+GEOIP,CN,CNRULE
+# Final Rule
+FINAL,PROXY,dns-failed
+
+[Host]
+localhost = 127.0.0.1
+
+[URL Rewrite]
+^https?:\/\/(www.)?(g|google)\.cn https://www.google.com 302

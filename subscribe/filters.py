@@ -68,7 +68,7 @@ def format_seq(seq, fmt, concat='', **kwargs):
 
 
 @app.template_filter()
-def get_proxies(link, parser, f, sort=None):
+def get_proxies(link, parser, f):
     def p(d):
 
         return d
@@ -81,7 +81,7 @@ def get_proxies(link, parser, f, sort=None):
     # proxy node parser
     proxies = (Proxy(proxy, parser) for proxy in raw_proxies)
 
-    return sorted(filter(f, proxies), key=sort)
+    return filter(f, proxies)
 
 
 @app.template_filter()

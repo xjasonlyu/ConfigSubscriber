@@ -11,12 +11,3 @@ def str2filter(raw):
         return lambda _: True
     # TODO: replace with safer operation
     return lambda p: eval(raw)
-
-
-# convert string to sorted function
-def str2sort(raw):
-    if not raw:
-        # default sort
-        return None
-    # TODO: replace with safer operation
-    return lambda p: eval(raw)

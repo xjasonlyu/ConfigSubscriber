@@ -5,7 +5,6 @@ import os
 import json
 
 from . import parser
-from .utils import str2sort
 from .utils import str2filter
 
 
@@ -41,11 +40,11 @@ def init_config() -> dict:
             raise InitError('Subscribe link url is required!')
 
         # convert string to function
-        body['sort'] = str2sort(body.get('sort'))
         body['filter'] = str2filter(body.get('filter'))
         body['parser'] = parser.get(body.get('parser'))
 
         # set default values
+        body.setdefault('sort', None)
         body.setdefault('extras', {})
         body.setdefault('policies', [])
 

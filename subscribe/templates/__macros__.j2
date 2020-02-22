@@ -1,7 +1,7 @@
 {# Macro functions #}
 
 {# proxies variable #}
-{% set proxies = cfg.link | get_proxies(cfg.parser, cfg.filter, cfg.sort) %}
+{% set proxies = cfg.link | get_proxies(cfg.parser, cfg.filter) | sort(attribute=cfg.sort) %}
 
 {# policies variable #}
 {% set policies = proxies | get_policies(cfg.policies) %}
