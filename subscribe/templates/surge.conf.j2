@@ -3,7 +3,7 @@
 
 {%- block Proxy %}
 {%- for proxy in macros.proxies %}
-{{ macros.marshal_proxy(proxy) | surge }}
+{{ proxy | marshal_proxy | surge }}
 {%- endfor %}
 {%- endblock %}
 
@@ -15,6 +15,6 @@ ADRULE = select, DIRECT, REJECT, REJECT-TINYGIF
 CNRULE = select, DIRECT{% for proxy in macros.proxies %}{% if proxy.node.iso == 'CN' %}, {{ proxy.node }}{% endif %}{% endfor %}
 MYRULE = select, DIRECT, PROXY
 {%- for policy in macros.policies %}
-{{ macros.marshal_policy(policy) | surge }}
+{{ policy | marshal_policy | surge }}
 {%- endfor %}
 {%- endblock %}

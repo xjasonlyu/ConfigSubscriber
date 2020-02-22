@@ -1,9 +1,9 @@
-{% extends '_clash.conf.j2' %}
+{% extends '_clash.yaml.j2' %}
 {%- import '__macros__.j2' as macros with context -%}
 
 {%- block Proxy %}
 {%- for proxy in macros.proxies %}
-{{- macros.marshal_proxy(proxy, client='clash') }}
+  - {{ proxy | marshal_proxy | clash }}
 {%- endfor %}
 {%- endblock %}
 
@@ -15,6 +15,6 @@
   - { name: CNRULE, type: select, proxies: [DIRECT{% for proxy in proxies %}{% if proxy.node.iso == 'CN' %}, {{ proxy.node }}{% endif %}{% endfor %}] }
   - { name: MYRULE, type: select, proxies: [DIRECT, PROXY] }
 {%- for policy in macros.policies %}
-{{- macros.marshal_policy(policy, client='clash') }}
+  - {{ policy | marshal_policy | clash }}
 {%- endfor %}
 {%- endblock %}
