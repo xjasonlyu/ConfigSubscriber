@@ -6,25 +6,25 @@ log-level: info
 external-controller: 127.0.0.1:9090
 cfw-latency-url: http://www.gstatic.com/generate_204
 Proxy:
-{%- block proxy %}
+{%- block Proxy %}
 {%- endblock %}
 Proxy Group:
-{%- block proxy_group %}
+{%- block ProxyGroup %}
 {%- endblock %}
 Rule:
   # Custom Rules
   - DOMAIN-SUFFIX,12x.me,MYRULE
   - DOMAIN-SUFFIX,xjasonlyu.com,MYRULE
   # Reject List
-{{ 'ADRULE'| surge2clash('https://ruleset.dev/surge3_reject', 'https://ruleset.dev/surge3_reject-tinygif') | format_seq('  - {}', '\n') }}
+{{ 'ADRULE'| s2c('https://ruleset.dev/surge3_reject', 'https://ruleset.dev/surge3_reject-tinygif') | fmt_seq('  - {}', '\n') }}
   # Media Services
-{{ 'MEDIA' | surge2clash('https://ruleset.dev/surge3_stream_services') | format_seq('  - {}', '\n') }}
+{{ 'MEDIA' | s2c('https://ruleset.dev/surge3_stream_services') | fmt_seq('  - {}', '\n') }}
   # Apple Services
-{{ 'APPLE' | surge2clash('https://ruleset.dev/surge3_apple_services') | format_seq('  - {}', '\n') }}
+{{ 'APPLE' | s2c('https://ruleset.dev/surge3_apple_services') | fmt_seq('  - {}', '\n') }}
   # Global Proxy
-{{ 'PROXY' | surge2clash('https://ruleset.dev/surge3_global_plus', 'https://ruleset.dev/surge3_global') | format_seq('  - {}', '\n') }}
+{{ 'PROXY' | s2c('https://ruleset.dev/surge3_global_plus', 'https://ruleset.dev/surge3_global') | fmt_seq('  - {}', '\n') }}
   # China Sites
-{{ 'CNRULE'| surge2clash('https://ruleset.dev/surge3_domestic') | format_seq('  - {}', '\n') }}
+{{ 'CNRULE'| s2c('https://ruleset.dev/surge3_domestic') | fmt_seq('  - {}', '\n') }}
   # Private Network
   - DOMAIN-SUFFIX,local,DIRECT
   - IP-CIDR,127.0.0.0/8,DIRECT

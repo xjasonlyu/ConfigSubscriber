@@ -1,13 +1,13 @@
 {% extends '_surge.conf.j2' %}
-{%- import '__macros__.j2' as macros with context -%}
+{% import '__macros__.j2' as macros with context %}
 
-{%- block proxy %}
+{%- block Proxy %}
 {%- for proxy in macros.proxies %}
-{{- macros.marshal_proxy(proxy, client='surge') }}
+{{ macros.marshal_proxy(proxy) | surge }}
 {%- endfor %}
 {%- endblock %}
 
-{%- block proxy_group %}
+{%- block ProxyGroup %}
 PROXY = select, {{ cfg.extras.names }}
 APPLE = select, PROXY, DIRECT
 MEDIA = select, PROXY, MANUAL
@@ -15,6 +15,6 @@ ADRULE = select, DIRECT, REJECT, REJECT-TINYGIF
 CNRULE = select, DIRECT{% for proxy in macros.proxies %}{% if proxy.node.iso == 'CN' %}, {{ proxy.node }}{% endif %}{% endfor %}
 MYRULE = select, DIRECT, PROXY
 {%- for policy in macros.policies %}
-{{- macros.marshal_policy(policy, client='surge') }}
+{{ macros.marshal_policy(policy) | surge }}
 {%- endfor %}
 {%- endblock %}

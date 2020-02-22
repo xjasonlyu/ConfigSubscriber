@@ -1,13 +1,13 @@
 {% extends '_clash.conf.j2' %}
 {%- import '__macros__.j2' as macros with context -%}
 
-{%- block proxy %}
+{%- block Proxy %}
 {%- for proxy in macros.proxies %}
 {{- macros.marshal_proxy(proxy, client='clash') }}
 {%- endfor %}
 {%- endblock %}
 
-{%- block proxy_group %}
+{%- block ProxyGroup %}
   - { name: PROXY, type: select, proxies: [{{ cfg.extras.names }}] }
   - { name: APPLE, type: select, proxies: [PROXY, DIRECT] }
   - { name: MEDIA, type: select, proxies: [PROXY, MANUAL] }
