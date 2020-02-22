@@ -18,6 +18,6 @@ config = init_config()
 cache = init_cache(app, config)
 
 # Init App Route in views
-import_module('subscribe.views')
+import_module('.views', package=__name__)
 # Init Template filters
-import_module('subscribe.filters')
+import_module('.filters', package=__name__)
