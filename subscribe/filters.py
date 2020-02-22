@@ -4,6 +4,15 @@
 from . import app
 from .utils import fetch_url
 
+from jinja2.utils import soft_unicode
+
+
+# Format sequence to string
+@app.template_filter()
+def format_seq(seq, fmt, concat='', **kwargs):
+    # format & concat
+    return concat.join(soft_unicode(fmt).format(text, **kwargs) for text in seq)
+
 
 # Generator: convert Surge rules to Clash rules
 @app.template_filter()

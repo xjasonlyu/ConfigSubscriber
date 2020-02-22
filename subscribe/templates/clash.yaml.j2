@@ -28,25 +28,15 @@ Rule:
   - DOMAIN-SUFFIX,12x.me,MYRULE
   - DOMAIN-SUFFIX,xjasonlyu.com,MYRULE
   # Reject List
-{%- for rule in 'ADRULE' | surge2clash('https://ruleset.dev/surge3_reject', 'https://ruleset.dev/surge3_reject-tinygif') %}
-  - {{ rule }}
-{%- endfor %}
+{{ 'ADRULE'| surge2clash('https://ruleset.dev/surge3_reject', 'https://ruleset.dev/surge3_reject-tinygif') | format_seq('  - {}', '\n') }}
   # Media Services
-{%- for rule in 'MEDIA' | surge2clash('https://ruleset.dev/surge3_stream_services') %}
-  - {{ rule }}
-{%- endfor %}
+{{ 'MEDIA' | surge2clash('https://ruleset.dev/surge3_stream_services') | format_seq('  - {}', '\n') }}
   # Apple Services
-{%- for rule in 'APPLE' | surge2clash('https://ruleset.dev/surge3_apple_services') %}
-  - {{ rule }}
-{%- endfor %}
+{{ 'APPLE' | surge2clash('https://ruleset.dev/surge3_apple_services') | format_seq('  - {}', '\n') }}
   # Global Proxy
-{%- for rule in 'PROXY' | surge2clash('https://ruleset.dev/surge3_global_plus', 'https://ruleset.dev/surge3_global') %}
-  - {{ rule }}
-{%- endfor %}
+{{ 'PROXY' | surge2clash('https://ruleset.dev/surge3_global_plus', 'https://ruleset.dev/surge3_global') | format_seq('  - {}', '\n') }}
   # China Sites
-{%- for rule in 'CNRULE' | surge2clash('https://ruleset.dev/surge3_domestic') %}
-  - {{ rule }}
-{%- endfor %}
+{{ 'CNRULE'| surge2clash('https://ruleset.dev/surge3_domestic') | format_seq('  - {}', '\n') }}
   # Private Network
   - DOMAIN-SUFFIX,local,DIRECT
   - IP-CIDR,127.0.0.0/8,DIRECT
