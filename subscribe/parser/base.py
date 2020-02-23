@@ -33,6 +33,13 @@ class Node:
         return str(self) > str(other)
 
     @property
+    def id(self):
+        try:
+            return int(self.code)
+        except ValueError:
+            return 0
+
+    @property
     def iso(self):
         if self._iso is None:
             # try to find ISO code from name
