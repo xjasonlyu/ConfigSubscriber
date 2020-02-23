@@ -76,7 +76,7 @@ def _dict(obj):
 
 @app.template_filter('filter')
 def _eval_filter(seq, key):
-    if key is None:
+    if not key:
         key = True
 
     # builtin functions
