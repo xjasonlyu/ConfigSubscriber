@@ -16,15 +16,15 @@ Rule:
   - DOMAIN-SUFFIX,12x.me,MYRULE
   - DOMAIN-SUFFIX,xjasonlyu.com,MYRULE
   # Reject List
-{{ 'ADRULE'| s2c('https://ruleset.dev/surge3_reject', 'https://ruleset.dev/surge3_reject-tinygif') | fmt_seq('  - {}', '\n') }}
+{{ 'ADRULE'| s2c('https://ruleset.dev/surge3_reject', 'https://ruleset.dev/surge3_reject-tinygif') | map('toclash', prefix='  - ') | join('\n') }}
   # Media Services
-{{ 'MEDIA' | s2c('https://ruleset.dev/surge3_stream_services') | fmt_seq('  - {}', '\n') }}
+{{ 'MEDIA' | s2c('https://ruleset.dev/surge3_stream_services') | map('toclash', prefix='  - ') | join('\n') }}
   # Apple Services
-{{ 'APPLE' | s2c('https://ruleset.dev/surge3_apple_services') | fmt_seq('  - {}', '\n') }}
+{{ 'APPLE' | s2c('https://ruleset.dev/surge3_apple_services') | map('toclash', prefix='  - ') | join('\n') }}
   # Global Proxy
-{{ 'PROXY' | s2c('https://ruleset.dev/surge3_global_plus', 'https://ruleset.dev/surge3_global') | fmt_seq('  - {}', '\n') }}
+{{ 'PROXY' | s2c('https://ruleset.dev/surge3_global_plus', 'https://ruleset.dev/surge3_global') | map('toclash', prefix='  - ') | join('\n') }}
   # China Sites
-{{ 'CNRULE'| s2c('https://ruleset.dev/surge3_domestic') | fmt_seq('  - {}', '\n') }}
+{{ 'CNRULE'| s2c('https://ruleset.dev/surge3_domestic') | map('toclash', prefix='  - ') | join('\n') }}
   # Private Network
   - DOMAIN-SUFFIX,local,DIRECT
   - IP-CIDR,127.0.0.0/8,DIRECT

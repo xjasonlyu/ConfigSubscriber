@@ -1,0 +1,31 @@
+{# import ProxyGroup template #}
+{%- from cfg.template import generate_proxy_group -%}
+
+{#- proxies variable -#}
+{%- set proxies = cfg.link | fetch_url | get_proxies(cfg.parser) | filter(cfg.filter) | sort(attribute=cfg.sort) -%}
+{#- policies variable -#}
+{%- set policies = generate_proxy_group(proxies) | get_policies -%}
+
+{#- Sperate Client -#}
+{%- set block = namespace() -%}
+{%- if client | lower | regex_match('^clash$') -%}
+    {%- extends 'base/clash.yaml.j2' -%}
+    {#- set values -#}
+    {%- set block.proxy = proxies | map('toclash', prefix='  - ') | join('\n') -%}
+    {%- set block.proxy_group = policies | map('toclash', prefix='  - ') | join('\n') -%}
+{%- elif client | lower | regex_match('^surge[3|4]?$') -%}
+    {%- extends 'base/surge.conf.j2' -%}
+    {#- set values -#}
+    {%- set block.proxy = proxies | map('tosurge') | join('\n') -%}
+    {%- set block.proxy_group = policies | map('tosurge') | join('\n') -%}
+{%- else -%}
+Client {{ client | lower }} Not Found
+{%- endif -%}
+
+{%- block Proxy %}
+{{ block.proxy }}
+{%- endblock %}
+
+{%- block ProxyGroup %}
+{{ block.proxy_group }}
+{%- endblock %}

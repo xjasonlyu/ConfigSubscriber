@@ -1,0 +1,17 @@
+{% macro generate_proxy_group(proxies) %}
+- { name: PROXY, type: select, proxies: [HK-AUTO, JP-AUTO, SG-AUTO, US-AUTO, HK-PEER, JP-PEER, SG-PEER, US-PEER, MANUAL] }
+- { name: APPLE, type: select, proxies: [PROXY, DIRECT] }
+- { name: MEDIA, type: select, proxies: [PROXY, MANUAL] }
+- { name: ADRULE, type: select, proxies: [DIRECT, REJECT] }
+- { name: CNRULE, type: select, proxies: [DIRECT, PROXY] }
+- { name: MYRULE, type: select, proxies: [DIRECT, PROXY] }
+- { name: MANUAL, type: select, proxies: [{{ proxies | filter_proxies | join(',') }}] }
+- { name: HK-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='HK' and node.net=='IPLC' and regex_search('杭|上|深|广', name)") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
+- { name: JP-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='JP' and node.net=='IPLC' and regex_search('杭|上|深|广', name)") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
+- { name: SG-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='SG' and node.net=='IPLC' and regex_search('杭|上|深|广', name)") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
+- { name: US-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='US' and node.net=='IPLC' and regex_search('杭|上|深|广', name)") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
+- { name: HK-PEER, type: select, proxies: [{{ proxies | filter_proxies("node.iso=='HK'") | join(',') }}] }
+- { name: JP-PEER, type: select, proxies: [{{ proxies | filter_proxies("node.iso=='JP'") | join(',') }}] }
+- { name: SG-PEER, type: select, proxies: [{{ proxies | filter_proxies("node.iso=='SG'") | join(',') }}] }
+- { name: US-PEER, type: select, proxies: [{{ proxies | filter_proxies("node.iso=='US'") | join(',') }}] }
+{% endmacro %}
