@@ -23,15 +23,12 @@ _start() {
     gunicorn -w 3 -b $HOST:$PORT --access-logfile $LOG_FILE subscribe:app
 }
 
-main() {
-    case $1 in
-        debug)
-        _debug
-        ;;
-        *)
-        _start
-        ;;
-    esac
-}
-
-main
+# case
+case $1 in
+    debug)
+    _debug
+    ;;
+    *)
+    _start
+    ;;
+esac
