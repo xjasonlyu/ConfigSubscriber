@@ -1,5 +1,5 @@
 {%- block BaseSurgeTemplate -%}
-#!MANAGED-CONFIG {{ request.url }} interval={{ cfg.extras.interval|d(259200) }} strict=true
+#!MANAGED-CONFIG {{ request.url }} interval={{ cfg.interval|d(259200) }} strict=true
 
 [General]
 loglevel = warning

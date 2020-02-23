@@ -43,6 +43,7 @@ def init_config() -> dict:
         # set default values
         body.setdefault('sort', None)
         body.setdefault('filter', None)
+        body.setdefault('interval', 0)
         body.setdefault('extras', {})
 
     return config

@@ -13,6 +13,7 @@
             "template": "modules/n3ro.j2",
             "sort": "node.net,node.flag,id",
             "filter": "node.flag and type=='ss'",
+            "interval": 86400,
             "extras": {}
         },
         "_auth_02_": {
@@ -21,6 +22,7 @@
             "template": "modules/rixcloud.j2",
             "sort": "node.attr,node.flag,id",
             "filter": "node.flag and type=='ss'",
+            "interval": 259200,
             "extras": {}
         }
     }
