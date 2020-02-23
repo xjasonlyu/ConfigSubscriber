@@ -1,52 +1,27 @@
 {
-    "auth": {
-        "link": "",
-        "parser": "n3ro",
-        "template": {
-            "clash": "clash.yaml",
-            "surge": "surge.conf"
-        },
-        "sort": "(p.node.net, p.node)",
-        "filter": "p.node.flag",
-        "policies": [
-            {"name": "MANUAL", "type": "select"},
-            {"name": "HK-AUTO", "type": "url-test", "f": "p.node.iso=='HK' and p.node.net=='IPLC' and re.search('杭|上|深|广', p.name)", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}},
-            {"name": "JP-AUTO", "type": "url-test", "f": "p.node.iso=='JP' and p.node.net=='IPLC' and re.search('杭|上|深|广', p.name)", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}},
-            {"name": "SG-AUTO", "type": "url-test", "f": "p.node.iso=='SG' and p.node.net=='IPLC' and re.search('杭|上|深|广', p.name)", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}},
-            {"name": "US-AUTO", "type": "url-test", "f": "p.node.iso=='US' and p.node.net=='IPLC' and re.search('杭|上|深|广', p.name)", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}},
-            {"name": "HK-PEER", "type": "select", "f": "p.node.iso=='HK'"},
-            {"name": "JP-PEER", "type": "select", "f": "p.node.iso=='JP'"},
-            {"name": "SG-PEER", "type": "select", "f": "p.node.iso=='SG'"},
-            {"name": "US-PEER", "type": "select", "f": "p.node.iso=='US'"}
-        ],
-        "extras": {
-            "names": "HK-AUTO, JP-AUTO, SG-AUTO, US-AUTO, HK-PEER, JP-PEER, SG-PEER, US-PEER, MANUAL"
+    "settings": {
+        "cache": {
+            "cache_type": "simple",
+            "cache_ignore_errors": false,
+            "cache_default_timeout": 300
         }
     },
-    "auth2": {
-        "link": "",
-        "parser": "rixcloud",
-        "template": {
-            "clash": "clash.yaml",
-            "surge": "surge.conf"
+    "subscriptions": {
+        "auth_01": {
+            "link": "",
+            "parser": "N3RO",
+            "template": "modules/n3ro.j2",
+            "sort": "node.net,node.flag,id",
+            "filter": "node.flag and type=='ss'",
+            "extras": {}
         },
-        "sort": "(p.node.attr, p.node)",
-        "filter": "p.node.flag",
-        "policies": [
-            {"name": "MANUAL", "type": "select"},
-            {"name": "HK-AUTO", "type": "url-test", "f": "p.node.iso=='HK' and p.node.net=='BGP'", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}},
-            {"name": "JP-AUTO", "type": "url-test", "f": "p.node.iso=='JP' and p.node.net=='BGP'", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}},
-            {"name": "SG-AUTO", "type": "url-test", "f": "p.node.iso=='SG' and p.node.net=='BGP'", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}},
-            {"name": "TW-AUTO", "type": "url-test", "f": "p.node.iso=='TW' and p.node.net=='BGP'", "attrs": {"url": "http://www.gstatic.com/generate_204", "interval": 120}},
-            {"name": "HK-PEER", "type": "select", "f": "p.node.iso=='HK'"},
-            {"name": "JP-PEER", "type": "select", "f": "p.node.iso=='JP'"},
-            {"name": "KR-PEER", "type": "select", "f": "p.node.iso=='KR'"},
-            {"name": "SG-PEER", "type": "select", "f": "p.node.iso=='SG'"},
-            {"name": "TW-PEER", "type": "select", "f": "p.node.iso=='TW'"},
-            {"name": "US-PEER", "type": "select", "f": "p.node.iso=='US'"}
-        ],
-        "extras": {
-            "names": "HK-AUTO, JP-AUTO, SG-AUTO, TW-AUTO, HK-PEER, JP-PEER, KR-PEER, SG-PEER, TW-PEER, US-PEER, MANUAL"
+        "auth_02": {
+            "link": "",
+            "parser": "rixCloud",
+            "template": "modules/rixcloud.j2",
+            "sort": "node.attr,node.flag,id",
+            "filter": "node.flag and type=='ss'",
+            "extras": {}
         }
     }
 }
