@@ -19,7 +19,8 @@
     {%- set block.proxy = proxies | map('tosurge') | join('\n') -%}
     {%- set block.proxy_group = policies | map('tosurge') | join('\n') -%}
 {%- else -%}
-Client {{ client }} Not Found
+{#- client not match, abort -#}
+{%- do abort(400, 'Configuration is not compatible') -%}
 {%- endif -%}
 
 {%- block Proxy %}
