@@ -16,6 +16,7 @@ from flask import render_template
 # Exceptions
 from jinja2.exceptions import TemplateError
 from werkzeug.exceptions import HTTPException
+from requests.exceptions import RequestException
 
 
 @app.errorhandler(Exception)
@@ -26,9 +27,11 @@ def return_json_if_error_occurred(e):
         else:
             message, code = f'{e.code} {e.name}.', e.code
     elif isinstance(e, TemplateError):
-        message, code = f'Template error: {e}.', 500
+        message, code = f'Template: {e}.', 500
+    elif isinstance(e, RequestException):
+        message, code = f'Requests: {e}.', 500
     else:
-        message, code = f'Internal error: {e}.', 500
+        message, code = f'Internal: {e}.', 500
     # JSON responses
     return jsonify(status=False, message=message), code
 
