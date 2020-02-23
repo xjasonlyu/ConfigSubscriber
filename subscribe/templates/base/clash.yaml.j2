@@ -1,3 +1,4 @@
+{%- block BaseClashTemplate -%}
 port: 1090
 socks-port: 1080
 allow-lan: false
@@ -36,3 +37,4 @@ Rule:
   - GEOIP,CN,CNRULE
   # Final Rule
   - MATCH,PROXY
+{% endblock %}

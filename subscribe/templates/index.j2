@@ -19,7 +19,7 @@
     {%- set block.proxy = proxies | map('tosurge') | join('\n') -%}
     {%- set block.proxy_group = policies | map('tosurge') | join('\n') -%}
 {%- else -%}
-Client {{ client | lower }} Not Found
+Client {{ client }} Not Found
 {%- endif -%}
 
 {%- block Proxy %}

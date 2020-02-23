@@ -1,3 +1,4 @@
+{%- block BaseSurgeTemplate -%}
 #!MANAGED-CONFIG {{ request.url }} interval={{ cfg.extras.interval|d(259200) }} strict=true
 
 [General]
@@ -55,3 +56,4 @@ localhost = 127.0.0.1
 
 [URL Rewrite]
 ^https?:\/\/(www.)?(g|google)\.cn https://www.google.com 302
+{% endblock %}
