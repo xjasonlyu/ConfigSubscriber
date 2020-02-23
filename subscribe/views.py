@@ -6,19 +6,16 @@ from . import app
 from . import cache
 from . import config
 
-# local modules
-from . import policy
-from .utils import fetch_url
-
-# flask modules
+# Flask modules
 from flask import abort
 from flask import jsonify
 from flask import request
+from flask import Response
 from flask import render_template
 
-import yaml
+# Exceptions
+from jinja2.exceptions import TemplateError
 from werkzeug.exceptions import HTTPException
-from requests.exceptions import RequestException
 
 
 @app.errorhandler(Exception)
@@ -28,12 +25,10 @@ def return_json_if_error_occurred(e):
             message, code = e.description, e.code
         else:
             message, code = f'{e.code} {e.name}.', e.code
-    elif isinstance(e, yaml.YAMLError):
-        message, code = f'Parse YAML file error.', 500
-    elif isinstance(e, (FileNotFoundError, RequestException)):
-        message, code = f'Fetch URL failed: {e}.', 500
+    elif isinstance(e, TemplateError):
+        message, code = f'Template error: {e}.', 500
     else:
-        message, code = f'API call failed: {e}.', 500
+        message, code = f'Internal error: {e}.', 500
     # JSON responses
     return jsonify(status=False, message=message), code
 
@@ -46,26 +41,11 @@ def subscribe(client):
     if auth not in config['subscriptions'].keys():
         abort(401, 'Auth challenge failed.')
 
-    if client.upper() not in config['templates']:
-        abort(404, 'Client template not found.')
-
-    # subscription detail config
-    cfg = config['subscriptions'][auth]
-
-    # fetch original subscription file
-    text = fetch_url(cfg['link'])
-    # load from yaml text
-    items = yaml.safe_load(text)
-    if not items or not items.get('Proxy'):
-        abort(500, 'Load proxies from YAML failed.')
-
-    group = policy.ProxyGroup(items['Proxy'], f=cfg['filter'], sort=cfg['sort'], nodalize=cfg['parser'])
-
-    policies = [group.get_policy(**kwargs) for kwargs in cfg['policies']]
-
-    return render_template(
-        config['templates'][client.upper()],
-        proxies=group.proxies,
-        policies=policies,
-        extras=cfg['extras']
+    return Response(
+        render_template(
+            'index.j2',
+            client=client,
+            cfg=config['subscriptions'][auth]
+        ),
+        mimetype='text/plain'
     )

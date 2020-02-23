@@ -5,7 +5,6 @@ import os
 import json
 
 from . import parser
-from .utils import str2filter
 
 
 class InitError(Exception):
@@ -24,10 +23,6 @@ def init_config() -> dict:
     with open(conf_path) as f:
         config = json.load(f)
 
-    # set default templates value
-    templates = config.setdefault('templates', {})
-    # lowercase all keys
-    config['templates'] = dict((k.upper(), v) for k, v in templates.items())
     # set default subscriptions value
     config.setdefault('subscriptions', {})
 
@@ -39,18 +34,15 @@ def init_config() -> dict:
         if not body.get('link'):
             raise InitError('Subscribe link url is required!')
 
+        if not body.get('template'):
+            raise InitError('Subscribe template is required!')
+
         # convert string to function
-        body['filter'] = str2filter(body.get('filter'))
         body['parser'] = parser.get(body.get('parser'))
 
         # set default values
         body.setdefault('sort', None)
+        body.setdefault('filter', None)
         body.setdefault('extras', {})
-        body.setdefault('policies', [])
-
-        # set default policies field
-        for policy in body['policies']:
-            # set default policy filter if empty
-            policy.update(f=str2filter(policy.get('f')))
 
     return config
