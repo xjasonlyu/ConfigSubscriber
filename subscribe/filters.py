@@ -3,6 +3,7 @@
 
 # Package Flask App
 from . import app
+from . import session
 
 import re
 import yaml
@@ -109,7 +110,7 @@ def fetch_url(url: str, timeout: int = 5, allow_redirects: bool = True) -> str:
     headers = {
         'Accept': '*/*'
     }
-    r = requests.get(url, headers=headers, timeout=timeout, allow_redirects=allow_redirects)
+    r = session.get(url, headers=headers, timeout=timeout, allow_redirects=allow_redirects)
     r.raise_for_status()
     return r.text
 

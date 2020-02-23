@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask
+from requests import Session
 from importlib import import_module
 
 # Package Import
@@ -16,6 +17,9 @@ config = init_config()
 
 # Init Flask Caching
 cache = init_cache(app, config)
+
+# Init Requests Session
+session = Session()
 
 # Init App Route in views
 import_module('.views', package=__name__)
