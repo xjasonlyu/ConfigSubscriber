@@ -16,22 +16,22 @@ from flask import render_template
 # Exceptions
 from jinja2.exceptions import TemplateError
 from werkzeug.exceptions import HTTPException
-from requests.exceptions import RequestException
 
 
 @app.errorhandler(Exception)
 def return_json_if_error_occurred(e):
     if isinstance(e, HTTPException):
         if len(e.description) < 40:
-            message, code = e.description, e.code
+            description = e.description
         else:
-            message, code = f'{e.code} {e.name}.', e.code
+            description = f'{e.code} {e.name}.'
+        message, code = description, e.code
     elif isinstance(e, TemplateError):
-        message, code = f'Template: {e}.', 500
-    elif isinstance(e, RequestException):
-        message, code = f'Requests: {e}.', 500
+        message, code = f'Template Error.', 500
+    elif isinstance(e, IOError):
+        message, code = f'Internal IO Error.', 500
     else:
-        message, code = f'Internal: {e}.', 500
+        message, code = f'Unknown Internal Error.', 500
     # JSON responses
     return jsonify(status=False, message=message), code
 
