@@ -23,6 +23,9 @@ def init_config() -> dict:
     with open(conf_path) as f:
         config = json.load(f)
 
+    # set default resource dir
+    config.setdefault('resource_dir', '.')
+
     # set default value
     config.setdefault('settings', {})
     config.setdefault('subscriptions', {})

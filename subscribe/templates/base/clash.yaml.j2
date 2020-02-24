@@ -14,8 +14,9 @@ Proxy Group:
 {%- endblock %}
 Rule:
   # Custom Rules
-  - DOMAIN-SUFFIX,12x.me,MYRULE
-  - DOMAIN-SUFFIX,xjasonlyu.com,MYRULE
+{{ 'REJECT' | s2c(resource_join('REJECT.list')) | map('toclash', prefix='  - ') | join('\n') }}
+{{ 'DIRECT' | s2c(resource_join('DIRECT.list')) | map('toclash', prefix='  - ') | join('\n') }}
+{{ 'PROXY'  | s2c(resource_join('PROXY.list')) | map('toclash', prefix='  - ') | join('\n') }}
   # Reject List
 {{ 'ADRULE'| s2c('https://ruleset.dev/surge3_reject', 'https://ruleset.dev/surge3_reject-tinygif') | map('toclash', prefix='  - ') | join('\n') }}
   # Media Services
