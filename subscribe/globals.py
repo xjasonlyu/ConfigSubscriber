@@ -7,11 +7,8 @@ from . import app
 from flask import abort
 from datetime import datetime
 
-# Directly add
+# abort
 app.add_template_global(abort)
 
-
-# Formatted date
-@app.template_global()
-def date():
-    return datetime.now().strftime('%Y%m%d')
+# date
+app.add_template_global(datetime.now().strftime, 'date')

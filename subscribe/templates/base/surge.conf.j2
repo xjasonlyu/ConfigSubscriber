@@ -1,5 +1,7 @@
 {%- block BaseSurgeTemplate -%}
 #!MANAGED-CONFIG {{ request.url }} interval={{ cfg.interval|d(259200) }} strict=true
+#Powered by xjasonlyu
+#Version {{ date('%Y%m%d') }}
 
 [General]
 loglevel = warning
