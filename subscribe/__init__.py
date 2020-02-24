@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import abort
 from flask import Flask
 from requests import Session
 from importlib import import_module
@@ -22,11 +21,12 @@ cache = init_cache(app, config)
 # Init Requests Session
 session = Session()
 
-# Add functions & extensions
-app.add_template_global(abort)
+# Add Extensions
 app.jinja_env.add_extension('jinja2.ext.do')
 
 # Init App Route in views
 import_module('.views', package=__name__)
 # Init Template filters
 import_module('.filters', package=__name__)
+# Init Template globals
+import_module('.globals', package=__name__)

@@ -7,7 +7,6 @@ from . import session
 
 import re
 import yaml
-import requests
 from jinja2 import Template
 from collections import Mapping
 
@@ -65,7 +64,7 @@ class Policy:
         return self.name
 
 
-# turn object to dict
+# Turn object to dict
 def _dict(obj):
     if isinstance(obj, (dict, Mapping)):
         return dict(obj)
@@ -89,13 +88,13 @@ def _eval_filter(seq, key):
     return (item for item in seq if t.render(**_builtins, **_dict(item)))
 
 
-# filter proxies with key
+# Filter proxies with key
 @app.template_filter('filter_proxies')
 def _filter_proxies(proxies, key=None, attr='node'):
     return (getattr(proxy, attr) for proxy in _eval_filter(proxies, key))
 
 
-# simple url fetcher
+# Simple url fetcher
 @app.template_filter()
 def fetch_url(url: str, timeout: int = 5, allow_redirects: bool = True) -> str:
     # process URL
