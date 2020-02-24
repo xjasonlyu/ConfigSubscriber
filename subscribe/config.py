@@ -23,7 +23,8 @@ def init_config() -> dict:
     with open(conf_path) as f:
         config = json.load(f)
 
-    # set default subscriptions value
+    # set default value
+    config.setdefault('settings', {})
     config.setdefault('subscriptions', {})
 
     # process config
