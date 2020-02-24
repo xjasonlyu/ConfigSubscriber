@@ -9,6 +9,7 @@ import re
 import yaml
 from jinja2 import Template
 from collections import Mapping
+from urllib.parse import urlparse
 
 
 class Proxy:
@@ -102,8 +103,8 @@ def fetch_url(url: str, timeout: int = 5, allow_redirects: bool = True) -> str:
         url = 'http://' + url
     # file protocol
     if url.startswith('file://'):
-        url = url[7:]
-        with open(url, 'r') as f:
+        path = urlparse(url).path
+        with open(path, 'r') as f:
             return f.read()
     # request headers
     headers = {
