@@ -4,6 +4,7 @@
 - { name: MEDIA, type: select, proxies: [PROXY, MANUAL] }
 - { name: ADRULE, type: select, proxies: [DIRECT, REJECT] }
 - { name: CNRULE, type: select, proxies: [DIRECT] }
+- { name: MYRULE, type: select, proxies: [PROXY, DIRECT] }
 - { name: DETOUR, type: select, proxies: [PROXY, DIRECT] }
 - { name: MANUAL, type: select, proxies: [{{ proxies | filter_proxies | join(',') }}] }
 - { name: HK-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='HK' and node.net=='IPLC' and regex_search('杭|上|深|广', name)") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
