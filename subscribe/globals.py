@@ -18,5 +18,5 @@ app.add_template_global(datetime.now().strftime, 'date')
 
 @app.template_global()
 def resource_join(rel_path):
-    resource_dir = path.abspath(config['resource_dir'])
+    resource_dir = path.abspath(config['resources_folder'])
     return 'file://' + resource_dir + '/' + rel_path

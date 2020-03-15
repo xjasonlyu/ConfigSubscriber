@@ -25,6 +25,5 @@
             "interval": 259200,
             "extras": {}
         }
-    },
-    "resource_dir": "./resource"
+    }
 }
