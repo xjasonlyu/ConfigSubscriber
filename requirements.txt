@@ -1,0 +1,6 @@
+Werkzeug==0.16.0
+requests==2.22.0
+Flask==1.1.1
+Flask_Caching==1.8.0
+Jinja2==2.11.1
+PyYAML==5.3
