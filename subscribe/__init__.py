@@ -9,24 +9,34 @@ from importlib import import_module
 from .cache import init_cache
 from .config import init_config
 
-# Init Flask App
-app = Flask(__name__)
+version_info = (0, 0, 1)
+version = '.'.join(str(c) for c in version_info)
 
-# Init Package Config
-config = init_config()
 
-# Init Flask Caching
-cache = init_cache(app, config)
+# Must be initiated before running
+def init(conf_folder):
+    global app, cache, config, session
+    # Init Package Config
+    config = init_config(conf_folder)
 
-# Init Requests Session
-session = Session()
+    # Init Flask App
+    app = Flask(
+        __name__,
+        template_folder=config['templates_folder']
+        )
 
-# Add Extensions
-app.jinja_env.add_extension('jinja2.ext.do')
+    # Init Flask Caching
+    cache = init_cache(app, config)
 
-# Init App Route in views
-import_module('.views', package=__name__)
-# Init Template filters
-import_module('.filters', package=__name__)
-# Init Template globals
-import_module('.globals', package=__name__)
+    # Init Requests Session
+    session = Session()
+
+    # Add Extensions
+    app.jinja_env.add_extension('jinja2.ext.do')
+
+    # Init App Route in views
+    import_module('.views', package=__name__)
+    # Init Template filters
+    import_module('.filters', package=__name__)
+    # Init Template globals
+    import_module('.globals', package=__name__)

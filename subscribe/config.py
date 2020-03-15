@@ -11,20 +11,20 @@ class InitError(Exception):
     pass
 
 
-def init_config() -> dict:
-    if os.environ.get('CONFIG'):
-        # get config path from ENV
-        conf_path = os.environ['CONFIG']
-    else:
-        # default config path
-        conf_path = 'config.json'
-
+def init_config(conf_folder) -> dict:
+    # configuration directory
+    conf_path = os.path.join(conf_folder, 'config.json')
     # load from json
     with open(conf_path) as f:
         config = json.load(f)
 
-    # set default resource dir
-    config.setdefault('resource_dir', '.')
+    # set default resources folder
+    resources_folder = os.path.join(conf_folder, 'resources')
+    config.setdefault('resources_folder', resources_folder)
+
+    # set default templates folder
+    templates_folder = os.path.join(conf_folder, 'templates')
+    config.setdefault('templates_folder', templates_folder)
 
     # set default value
     config.setdefault('settings', {})
