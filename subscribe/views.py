@@ -20,6 +20,10 @@ from werkzeug.exceptions import HTTPException
 
 @app.errorhandler(Exception)
 def return_json_if_error_occurred(e):
+    if app.debug:
+        # log errors
+        app.log_exception(e)
+
     if isinstance(e, HTTPException):
         if len(e.description) < 40:
             description = e.description

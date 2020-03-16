@@ -15,11 +15,13 @@ def parse_arguments():
     cfg = os.path.join(os.getcwd(), 'config')
 
     parser.add_argument('-c', '--config', type=str, default=cfg,
-                        help='Config directory [Default=./config]')
+                        help='config directory [Default=./config]')
     parser.add_argument('-b', '--bind', type=str, default='0.0.0.0',
-                        help='Host to serve [Default=0.0.0.0]')
+                        help='host to serve [Default=0.0.0.0]')
     parser.add_argument('-p', '--port', type=int, default=9000,
-                        help='Port to serve [Default=9000]')
+                        help='port to serve [Default=9000]')
+    parser.add_argument('--debug', action='store_true',
+                        help='enable debug mode')
     parser.add_argument('--version', action='version',
                         version='%(prog)s v'+subscribe.version)
 
@@ -34,6 +36,9 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     subscribe.init(args.config)
+
+    if args.debug:
+        subscribe.app.debug = True
 
     run_simple(args.bind, args.port, subscribe.app)
 
