@@ -38,6 +38,7 @@ def main():
     subscribe.init(args.config)
 
     if args.debug:
+        print('* Debug mode: on')
         subscribe.app.debug = True
 
     run_simple(args.bind, args.port, subscribe.app)
