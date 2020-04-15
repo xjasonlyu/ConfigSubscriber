@@ -1,0 +1,9 @@
+version: '3'
+services:
+  subscribe:
+    image: subscribe:latest
+    volumes:
+      - /etc/subscribe:/config:ro
+    restart: always
+    network_mode: host
+    container_name: subscribe
