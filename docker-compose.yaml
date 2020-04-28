@@ -1,9 +1,9 @@
 version: '3'
 services:
-  subscribe:
-    image: subscribe:latest
+  subscriber:
+    image: xjasonlyu/subscriber:latest
     volumes:
-      - /etc/subscribe:/config:ro
+      - /etc/subscriber:/config:ro
     restart: always
     network_mode: host
-    container_name: subscribe
+    container_name: subscriber
