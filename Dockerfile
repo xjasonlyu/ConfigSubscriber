@@ -1,4 +1,4 @@
-FROM python:3-alpine
+FROM python:alpine
 
 COPY ./requirements.txt /requirements.txt
 COPY ./subscribe /subscribe
