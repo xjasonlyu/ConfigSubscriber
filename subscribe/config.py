@@ -32,6 +32,7 @@ def init_config(conf_folder) -> dict:
     config.setdefault('ruleset', {})
 
     # ruleset default value
+    config['ruleset'].setdefault('mapping', {})
     config['ruleset'].setdefault('remotes', [])
 
     # process config
