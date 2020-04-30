@@ -183,15 +183,18 @@ def surge2clash(policy, *urls):
 # add absent rules
 @app.template_filter('add_abs_rules')
 def add_abs_rules(rule_text, *urls):
-    new_rules = rule_text.splitlines()
+    new_rules = set(rule_text.splitlines())
     for rule in chain(*[raw.splitlines() for raw in map(fetch_url, urls)]):
         # strip whitespace
         rule = rule.strip()
         # ignore empty line
         if not rule:
             continue
+        # remove force-remote-dns option
+        if rule.endswith(',force-remote-dns'):
+            rule = rule[:-len(',force-remote-dns')]
         # add rule include comment
-        new_rules.append(rule)
+        new_rules.add(rule)
     return '\n'.join(new_rules)
 
 
