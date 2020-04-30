@@ -83,6 +83,9 @@ services:
         }
     },
     "ruleset": {
+        "mapping": {
+            "reject": "Reject.list"
+        },
         "remotes": [
             "https://raw.githubusercontent.com/ConnersHua/Profiles/master/Surge/Ruleset",
             "https://raw.githubusercontent.com/rixCloud-Inc/rixCloud-Surge3_Rules/master"
@@ -103,9 +106,10 @@ services:
 - `interval`: 配置更新间隔，仅Surge支持，可以忽略
 - `extras`: 额外的变量，方便jinja2模版的引用
 
-`ruleset`字段目前只有`remotes`一个子字段，作为上游规则集URL
+`ruleset`字段，支持`remotes`和`mapping`两个子字段，分别作为规则名映射和上游规则集URL
 
 - 示例URL: `http://yourserver/ruleset/Apple.list`
+- `http://yourserver/ruleset/reject` == `http://yourserver/ruleset/Reject.list`
 
 ### Templates
 
