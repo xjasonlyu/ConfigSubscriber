@@ -201,7 +201,7 @@ def add_abs_rules(rule_text, *urls):
 # remove duplicate rules
 @app.template_filter('rm_dup_rules')
 def rm_dup_rules(rule_text, *urls):
-    rule_set = OrderedSet()
+    rule_set = set()
     for rule in chain(*[raw.splitlines() for raw in map(fetch_url, urls)]):
         # strip whitespace
         rule = rule.strip()
