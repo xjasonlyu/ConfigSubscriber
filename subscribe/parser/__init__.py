@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re
 import os
-from os import path
+import re
 from importlib import import_module
+from os import path
 
 # builtin packages
 from . import base
@@ -27,6 +27,7 @@ class Map:
             # capture all exceptions
             except:
                 return base.nodalize(name)
+
         return _wrapper
 
     def __getitem__(self, key):

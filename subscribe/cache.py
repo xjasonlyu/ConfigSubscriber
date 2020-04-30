@@ -14,7 +14,7 @@ def init_cache(app, config):
         cache_config = {
             'CACHE_TYPE': 'null',
             'CACHE_NO_NULL_WARNING': True
-            }
+        }
 
     # Uppercase all keys
     cache_config = dict((k.upper(), v) for k, v in cache_config.items())

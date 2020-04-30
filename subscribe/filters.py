@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from . import app
-from . import session
-from .proxies import Policy
-from .proxies import Proxy
-
 import re
 from collections import Mapping
 from itertools import chain
@@ -14,6 +9,11 @@ from urllib.parse import urlparse
 import yaml
 from jinja2 import Template
 from orderedset import OrderedSet
+
+from . import app
+from . import session
+from .proxies import Policy
+from .proxies import Proxy
 
 
 # Turn object to dict

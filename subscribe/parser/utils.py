@@ -3,7 +3,6 @@
 
 import re
 
-
 # common region mapping
 __str2iso__ = {
     '中': 'CN',
@@ -25,7 +24,6 @@ __str2iso__ = {
     '荷': 'NL',
     '印': 'IN',
 }
-
 
 # Chinese region name to ISO
 __region2iso__ = {

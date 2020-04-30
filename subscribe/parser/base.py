@@ -7,18 +7,17 @@ from .utils import iso2flag
 
 
 class Node:
+    # Base fields
+    net = ''  # net: IPLC RELAY
+    tag = ''  # tag: xxx
+    attr = ''  # attr: xxx
+    code = ''  # id: 01
+    name = ''  # xxx
+    rate = 1.0  # rate
 
-    # Base fields 
-    net = ''      # net: IPLC RELAY
-    tag = ''      # tag: xxx
-    attr = ''     # attr: xxx
-    code = ''     # id: 01
-    name = ''     # xxx
-    rate = 1.0    # rate
-
-    _iso = None      # iso code: HK
-    _flag = None     # emoji flag
-    _name = None     # original node name
+    _iso = None  # iso code: HK
+    _flag = None  # emoji flag
+    _name = None  # original node name
 
     def __init__(self, name, *args, **kwargs):
         self._name = name

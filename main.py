@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
 import argparse
+import os
+
+from werkzeug.serving import run_simple
 
 import subscribe
-from werkzeug.serving import run_simple
 
 
 def parse_arguments():

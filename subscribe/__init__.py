@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask
-from requests import Session
 from importlib import import_module
 
-# Package Import
+from flask import Flask
+from requests import Session
+
 from .cache import init_cache
 from .config import init_config
 
@@ -26,7 +26,7 @@ def init(conf_folder):
     app = Flask(
         __name__,
         template_folder=config['templates_folder']
-        )
+    )
 
     # Init Flask Caching
     cache = init_cache(app, config)

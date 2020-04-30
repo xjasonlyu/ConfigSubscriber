@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Package Flask App
+from datetime import datetime
+from os import path
+
+from flask import abort
+
 from . import app
 from . import config
-
-from os import path
-from flask import abort
-from datetime import datetime
 
 # abort
 app.add_template_global(abort)

@@ -1,22 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Package variables
-from . import config
-
-# Package modules
-from .filters import fetch_url
-
-# Python library
 from urllib.parse import urljoin
 
-# Flask modules
-from markupsafe import escape
 from flask import render_template
 from flask import render_template_string
-
-# Exceptions
+from markupsafe import escape
 from requests.exceptions import HTTPError
+
+from . import config
+from .filters import fetch_url
 
 
 def _get_rule(rule):

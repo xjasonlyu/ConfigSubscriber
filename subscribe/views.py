@@ -1,24 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Package variables
+from flask import Response
+from flask import abort
+from flask import jsonify
+from flask import render_template
+from flask import request
+from jinja2.exceptions import TemplateError
+from werkzeug.exceptions import HTTPException
+
 from . import app
 from . import cache
 from . import config
-
-# Package modules
 from . import ruleset
-
-# Flask modules
-from flask import abort
-from flask import jsonify
-from flask import request
-from flask import Response
-from flask import render_template
-
-# Exceptions
-from jinja2.exceptions import TemplateError
-from werkzeug.exceptions import HTTPException
 
 
 @app.errorhandler(Exception)
