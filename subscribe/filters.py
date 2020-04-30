@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Package Flask App
 from . import app
 from . import session
-
-from .proxies import Proxy
 from .proxies import Policy
+from .proxies import Proxy
 
 import re
+from collections import Mapping
+from itertools import chain
+from urllib.parse import urlparse
+
 import yaml
 from jinja2 import Template
-from itertools import chain
-from collections import Mapping
-from urllib.parse import urlparse
+from orderedset import OrderedSet
 
 
 # Turn object to dict
@@ -183,7 +183,7 @@ def surge2clash(policy, *urls):
 # add absent rules
 @app.template_filter('add_abs_rules')
 def add_abs_rules(rule_text, *urls):
-    new_rules = set(rule_text.splitlines())
+    new_rules = OrderedSet(rule_text.splitlines())
     for rule in chain(*[raw.splitlines() for raw in map(fetch_url, urls)]):
         # strip whitespace
         rule = rule.strip()
@@ -201,7 +201,7 @@ def add_abs_rules(rule_text, *urls):
 # remove duplicate rules
 @app.template_filter('rm_dup_rules')
 def rm_dup_rules(rule_text, *urls):
-    rule_set = set()
+    rule_set = OrderedSet()
     for rule in chain(*[raw.splitlines() for raw in map(fetch_url, urls)]):
         # strip whitespace
         rule = rule.strip()
@@ -209,5 +209,4 @@ def rm_dup_rules(rule_text, *urls):
         if not rule or rule.startswith('#'):
             continue
         rule_set.add(rule)
-
     return '\n'.join(rule for rule in rule_text.splitlines() if rule not in rule_set)

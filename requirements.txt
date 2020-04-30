@@ -1,7 +1,8 @@
-Werkzeug==0.16.0
-requests==2.22.0
-Flask==1.1.1
+Werkzeug==1.0.1
+requests==2.23.0
+Flask==1.1.2
 Flask_Caching==1.8.0
-Jinja2==2.11.1
+Jinja2==2.11.2
 PyYAML==5.3.1
 MarkupSafe==1.1.1
+orderedset==2.0.3
