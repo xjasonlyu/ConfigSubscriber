@@ -29,6 +29,10 @@ def init_config(conf_folder) -> dict:
     # set default value
     config.setdefault('settings', {})
     config.setdefault('subscriptions', {})
+    config.setdefault('ruleset', {})
+
+    # ruleset default value
+    config['ruleset'].setdefault('remotes', [])
 
     # process config
     for auth, body in config['subscriptions'].items():

@@ -1,0 +1,1 @@
+{{ "https://raw.githubusercontent.com/ConnersHua/Profiles/master/Surge/Ruleset/China.list" | fetch_url | rm_dup_rules('http://localhost:9000/ruleset/remove.list') }}

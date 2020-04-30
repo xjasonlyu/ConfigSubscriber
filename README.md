@@ -81,6 +81,12 @@ services:
             "interval": 259200,
             "extras": {}
         }
+    },
+    "ruleset": {
+        "remotes": [
+            "https://raw.githubusercontent.com/ConnersHua/Profiles/master/Surge/Ruleset",
+            "https://raw.githubusercontent.com/rixCloud-Inc/rixCloud-Surge3_Rules/master"
+        ]
     }
 }
 ```
@@ -96,6 +102,10 @@ services:
 - `filter`: 节点过滤器，只有满足条件才会进一步转换，字段参考`subscribe.filter::Proxy`类的实现
 - `interval`: 配置更新间隔，仅Surge支持，可以忽略
 - `extras`: 额外的变量，方便jinja2模版的引用
+
+`ruleset`字段目前只有`remotes`一个子字段，作为上游规则集URL
+
+- 示例URL: `http://yourserver/ruleset/Apple.list`
 
 ### Templates
 

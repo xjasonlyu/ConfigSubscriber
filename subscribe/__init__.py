@@ -12,6 +12,9 @@ from .config import init_config
 version_info = (0, 0, 1)
 version = '.'.join(str(c) for c in version_info)
 
+# global variables
+app = cache = config = session = None
+
 
 # Must be initiated before running
 def init(conf_folder):

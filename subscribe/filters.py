@@ -11,6 +11,7 @@ from .proxies import Policy
 import re
 import yaml
 from jinja2 import Template
+from itertools import chain
 from collections import Mapping
 from urllib.parse import urlparse
 
@@ -34,7 +35,7 @@ def _eval_filter(seq, key):
         'regex_match': lambda exp, text: re.match(exp, text),
         'regex_search': lambda exp, text: re.search(exp, text)
     }
-    # Jinja template
+    # Jinja2 template
     t = Template(f'{{% if {key} %}}{{{{ True }}}}{{% endif %}}')
     return (item for item in seq if t.render(**_builtins, **_dict(item)))
 
@@ -137,12 +138,7 @@ def surge2clash(policy, *urls):
     t = ('DOMAIN', 'DOMAIN-KEYWORD', 'DOMAIN-SUFFIX', 'IP-CIDR', 'GEOIP')
     m = {'SRC-IP': 'SRC-IP-CIDR', 'DEST-PORT': 'DST-PORT', 'IN-PORT': 'SRC-PORT'}
 
-    # fetch rules via url
-    def fetch_rules():
-        for rules in (raw.splitlines() for raw in map(fetch_url, urls)):
-            yield from rules
-
-    for rule in fetch_rules():
+    for rule in chain(*[raw.splitlines() for raw in map(fetch_url, urls)]):
         # strip whitespace
         rule = rule.strip()
         # ignore empty line or comment
@@ -180,3 +176,17 @@ def surge2clash(policy, *urls):
             yield f'{_data},{_attr}'
         else:
             yield _data
+
+
+@app.template_filter('rm_dup_rules')
+def rm_dup_rules(rule_text, *urls):
+    rule_set = set()
+    for rule in chain(*[raw.splitlines() for raw in map(fetch_url, urls)]):
+        # strip whitespace
+        rule = rule.strip()
+        # ignore empty line or comment
+        if not rule or rule.startswith('#'):
+            continue
+        rule_set.add(rule)
+
+    return '\n'.join(rule for rule in rule_text.splitlines() if rule not in rule_set)

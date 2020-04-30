@@ -6,6 +6,9 @@ from . import app
 from . import cache
 from . import config
 
+# Package modules
+from . import ruleset
+
 # Flask modules
 from flask import abort
 from flask import jsonify
@@ -40,9 +43,26 @@ def return_json_if_error_occurred(e):
     return jsonify(status=False, message=message), code
 
 
+@app.route('/ruleset/<path:rule>', methods=['GET'])
+@cache.cached(query_string=True)
+def api_ruleset(rule):
+    # priority: local > remote
+    try:
+        # try serve local
+        content = ruleset.serve_local(rule)
+    except TemplateError:
+        # if failed then try serve remote
+        content = ruleset.serve_remote(rule)
+
+    if not content:
+        abort(404, 'Ruleset not found.')
+    else:
+        return Response(content, mimetype='text/plain')
+
+
 @app.route('/subscribe/<client>', methods=['GET'])
 @cache.cached(query_string=True)
-def subscribe(client):
+def api_subscribe(client):
     # authorization check
     auth = request.args.get('auth')
     if auth not in config['subscriptions'].keys():

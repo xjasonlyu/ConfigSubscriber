@@ -25,5 +25,11 @@
             "interval": 259200,
             "extras": {}
         }
+    },
+    "ruleset": {
+        "remotes": [
+            "https://raw.githubusercontent.com/ConnersHua/Profiles/master/Surge/Ruleset",
+            "https://raw.githubusercontent.com/rixCloud-Inc/rixCloud-Surge3_Rules/master"
+        ]
     }
 }
