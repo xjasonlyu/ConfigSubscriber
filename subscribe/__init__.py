@@ -9,7 +9,7 @@ from importlib import import_module
 from .cache import init_cache
 from .config import init_config
 
-version_info = (0, 0, 1)
+version_info = (0, 0, 2)
 version = '.'.join(str(c) for c in version_info)
 
 # global variables
