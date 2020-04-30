@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 
 import yaml
 from jinja2 import Template
-from orderedset import OrderedSet
+from ordered_set import OrderedSet
 
 from . import app
 from . import session
