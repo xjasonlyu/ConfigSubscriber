@@ -1,0 +1,1 @@
+{{ "https://raw.githubusercontent.com/ConnersHua/Profiles/master/Surge/Ruleset/Apple.list" | fetch_url | add_abs_rules("https://raw.githubusercontent.com/ConnersHua/Profiles/master/Surge/Ruleset/PayPal.list") }}

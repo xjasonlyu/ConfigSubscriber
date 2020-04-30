@@ -180,6 +180,22 @@ def surge2clash(policy, *urls):
             yield _data
 
 
+# add absent rules
+@app.template_filter('add_abs_rules')
+def add_abs_rules(rule_text, *urls):
+    new_rules = rule_text.splitlines()
+    for rule in chain(*[raw.splitlines() for raw in map(fetch_url, urls)]):
+        # strip whitespace
+        rule = rule.strip()
+        # ignore empty line
+        if not rule:
+            continue
+        # add rule include comment
+        new_rules.append(rule)
+    return '\n'.join(new_rules)
+
+
+# remove duplicate rules
 @app.template_filter('rm_dup_rules')
 def rm_dup_rules(rule_text, *urls):
     rule_set = set()
