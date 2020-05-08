@@ -38,7 +38,7 @@ class N3RO(base.Node):
 
         # add id code
         if s[-1] != ')' and not re.match(r'\d{2}', s[-2:]):
-            s += ' ' + '01'
+            s += '-' + '01'
 
         return s.split('-', 2)
 
