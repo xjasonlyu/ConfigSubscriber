@@ -38,7 +38,7 @@ class N3RO(base.Node):
         # if not re.match(r'\d{2}', s[-2:]):
         #     s += ' ' + '01'
 
-        return s.split('-', 3)
+        return s.split('-', 2)
 
 
 def nodalize(*args, **kwargs):
