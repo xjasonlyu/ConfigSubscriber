@@ -32,11 +32,13 @@ class N3RO(base.Node):
         s = s.replace('中继', 'RELAY')
         s = s.replace('专线', 'IPLC')
         s = s.replace(' → ', '→')
+        s = s.replace('[', '(')
+        s = s.replace(']', ')')
         s = s.replace(' ', '-')
 
         # add id code
-        # if not re.match(r'\d{2}', s[-2:]):
-        #     s += ' ' + '01'
+        if s[-1] != ')' and not re.match(r'\d{2}', s[-2:]):
+            s += ' ' + '01'
 
         return s.split('-', 2)
 
