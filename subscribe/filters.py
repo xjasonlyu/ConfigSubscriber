@@ -72,6 +72,8 @@ def get_proxies(text, parser):
     # load from yaml text
     items = yaml.safe_load(text)
     raw_proxies = items.get('Proxy')
+    if not raw_proxies:
+        return []
     # remove duplicate proxy via name
     raw_proxies_table = dict((proxy['name'], proxy) for proxy in raw_proxies)
     # proxy node parser
