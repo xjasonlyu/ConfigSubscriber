@@ -4,6 +4,8 @@ services:
     image: xjasonlyu/subscriber:latest
     volumes:
       - /etc/subscriber:/config:ro
+      # - $PWD/subscribe:/subscribe:ro
     restart: always
     network_mode: host
+    # command: --debug
     container_name: subscriber
