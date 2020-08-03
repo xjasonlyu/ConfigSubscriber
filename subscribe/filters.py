@@ -104,7 +104,7 @@ def to_clash(obj, prefix='', suffix=''):
     # Proxy
     if isinstance(obj, Proxy):
         result = Template('{ name: {{node}}, type: {{type}}, server: {{server}}, port: {{port}}, '
-                          'cipher: {{cipher}}, password: {{password}}, udp={{udp|lower}} }'
+                          'cipher: {{cipher}}, password: {{password}}, udp: {{udp|lower}} }'
                           ).render(**_dict(obj))
     # ProxyGroup
     elif isinstance(obj, Policy):
