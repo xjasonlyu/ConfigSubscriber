@@ -71,7 +71,7 @@ def get_proxies(text, parser):
     # TODO: support other kind configs
     # load from yaml text
     items = yaml.safe_load(text)
-    raw_proxies = items.get('Proxy')
+    raw_proxies = items.get('proxies')
     if not raw_proxies:
         return []
     # remove duplicate proxy via name
