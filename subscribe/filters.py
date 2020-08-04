@@ -186,8 +186,8 @@ def surge2clash(policy, *urls):
 
 
 # add absent rules
-@app.template_filter('add_abs_rules')
-def add_abs_rules(rule_text, *urls):
+@app.template_filter()
+def add_abs_rules(rule_text, *urls, prefix='', suffix=''):
     new_rules = OrderedSet(rule_text.splitlines())
     for rule in chain(*[raw.splitlines() for raw in map(fetch_url, urls)]):
         # strip whitespace
@@ -200,12 +200,12 @@ def add_abs_rules(rule_text, *urls):
             rule = rule[:-len(',force-remote-dns')]
         # add rule include comment
         new_rules.add(rule)
-    return '\n'.join(new_rules)
+    return '\n'.join(prefix + rule + suffix for rule in new_rules)
 
 
 # remove duplicate rules
-@app.template_filter('rm_dup_rules')
-def rm_dup_rules(rule_text, *urls):
+@app.template_filter()
+def rm_dup_rules(rule_text, *urls, prefix='', suffix=''):
     rule_set = set()
     for rule in chain(*[raw.splitlines() for raw in map(fetch_url, urls)]):
         # strip whitespace
@@ -214,4 +214,4 @@ def rm_dup_rules(rule_text, *urls):
         if not rule or rule.startswith('#'):
             continue
         rule_set.add(rule)
-    return '\n'.join(rule for rule in rule_text.splitlines() if rule not in rule_set)
+    return '\n'.join(prefix + rule + suffix for rule in rule_text.splitlines() if rule not in rule_set)
