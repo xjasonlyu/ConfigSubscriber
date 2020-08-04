@@ -17,7 +17,7 @@ app = cache = config = session = None
 
 
 # Must be initiated before running
-def init(conf_folder):
+def init(conf_folder, debug=False):
     global app, cache, config, session
     # Init Package Config
     config = init_config(conf_folder)
@@ -27,6 +27,9 @@ def init(conf_folder):
         __name__,
         template_folder=config['templates_folder']
     )
+
+    # Set debug value
+    app.debug = debug
 
     # Init Flask Caching
     cache = init_cache(app, config)

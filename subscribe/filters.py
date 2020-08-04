@@ -68,10 +68,11 @@ def fetch_url(url: str, timeout: int = 5, allow_redirects: bool = True) -> str:
 
 @app.template_filter()
 def get_proxies(text, parser):
+    patten = 'proxies'
     # TODO: support other kind configs
     # load from yaml text
     items = yaml.safe_load(text)
-    raw_proxies = items.get('proxies')
+    raw_proxies = items.get(pastten)
     if not raw_proxies:
         return []
     # remove duplicate proxy via name

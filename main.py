@@ -36,10 +36,7 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    subscribe.init(args.config)
-
-    if args.debug:
-        subscribe.app.debug = True
+    subscribe.init(args.config, args.debug)
 
     run_simple(args.bind, args.port,
                subscribe.app, threaded=True,
