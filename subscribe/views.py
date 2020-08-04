@@ -66,6 +66,7 @@ def api_subscribe(client):
         render_template(
             'index.j2',
             client=client,
+            args=request.args,
             cfg=config['subscriptions'][auth]
         ),
         mimetype='text/plain'
