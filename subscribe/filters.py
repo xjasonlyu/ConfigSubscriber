@@ -171,10 +171,10 @@ def surge2clash(policy, *urls):
 
         # concat
         if _type in t:
-            _data = f'{_type},{_value},{policy}'
+            _data = f'{_type},{_value},{policy}'.strip(',')
         # replace
         elif _type in m:
-            _data = f'{m[_type]},{_value},{policy}'
+            _data = f'{m[_type]},{_value},{policy}'.strip(',')
         else:
             continue
 
