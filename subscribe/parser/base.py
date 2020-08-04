@@ -40,7 +40,7 @@ class Node:
 
     @property
     def iso(self):
-        if self._iso is None:
+        if self._iso is None or len(self._iso) != 2:
             # try to find ISO code from name
             self._iso = find_iso(self._name, ignore=True)
 

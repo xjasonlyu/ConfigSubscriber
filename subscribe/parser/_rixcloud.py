@@ -13,10 +13,10 @@ class RixCloud(base.Node):
 
         data = self._process_(name.upper())
 
-        self.iso, self.attr, self.net, self.code = data
+        self._iso, self.net, self.attr, self.code = data
 
     def __str__(self):
-        return f'{self.flag}{self.iso}-{self.attr}-{self.net}-{self.code}'
+        return f'{self.flag}{self.iso}-{self.net}-{self.attr}-{self.code}'
 
     @staticmethod
     def _process_(s: str) -> list:
@@ -31,6 +31,7 @@ class RixCloud(base.Node):
         s = s.replace('标准 BGP', ' STD')
         s = s.replace('特殊 BGP', ' SPEC')
         s = s.replace('实验性 BGP', ' EXP')
+        # s = s.replace('标准 IEPL', ' IEPL')
         return s.split()
 
 
