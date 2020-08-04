@@ -31,7 +31,7 @@ class RixCloud(base.Node):
         s = s.replace('标准 BGP', ' STD')
         s = s.replace('特殊 BGP', ' SPEC')
         s = s.replace('实验性 BGP', ' EXP')
-        # s = s.replace('标准 IEPL', ' IEPL')
+        s = s.replace('标准 IEPL', ' IEPL')
         return s.split()
 
 
