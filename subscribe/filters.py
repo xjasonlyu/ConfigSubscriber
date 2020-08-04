@@ -48,7 +48,7 @@ def _filter_proxies(proxies, key=None, attr='node'):
 
 # Simple url fetcher
 @app.template_filter()
-def fetch_url(url: str, timeout: int = 5, allow_redirects: bool = True) -> str:
+def fetch_url(url: str, timeout: int = 5, allow_redirects: bool = True, proxies: str = "") -> str:
     # process URL
     if not re.match('(http|https|file)://', url):
         url = 'http://' + url
@@ -61,7 +61,9 @@ def fetch_url(url: str, timeout: int = 5, allow_redirects: bool = True) -> str:
     headers = {
         'Accept': '*/*'
     }
-    r = session.get(url, headers=headers, timeout=timeout, allow_redirects=allow_redirects)
+    # proxies
+    proxies = dict(http=proxies, https=proxies) if proxies else None
+    r = session.get(url, headers=headers, timeout=timeout, allow_redirects=allow_redirects, proxies=proxies)
     r.raise_for_status()
     return r.text
 

@@ -2,7 +2,7 @@
 {%- from cfg.template import generate_proxy_group -%}
 
 {#- proxies variable -#}
-{%- set proxies = cfg.link | fetch_url | get_proxies(cfg.parser) | filter(cfg.filter) | sort(attribute=cfg.sort) -%}
+{%- set proxies = cfg.link | fetch_url(proxies=cfg.proxy) | get_proxies(cfg.parser) | filter(cfg.filter) | sort(attribute=cfg.sort) -%}
 {#- policies variable -#}
 {%- set policies = generate_proxy_group(proxies) | get_policies -%}
 

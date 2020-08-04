@@ -18,6 +18,7 @@
         },
         "_auth_02_": {
             "link": "https://example.com/config_02.yml",
+            "proxy": "socks5://127.0.0.1:1080",
             "parser": "rixCloud",
             "template": "modules/rixcloud.j2",
             "sort": "node.attr,node.flag,id",

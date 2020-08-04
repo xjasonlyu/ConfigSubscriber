@@ -53,6 +53,7 @@ def init_config(conf_folder) -> dict:
         body.setdefault('sort', None)
         body.setdefault('filter', None)
         body.setdefault('interval', 0)
+        body.setdefault('proxy', "")
         body.setdefault('extras', {})
 
     return config
