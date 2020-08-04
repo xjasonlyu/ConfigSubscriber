@@ -7,10 +7,10 @@
 - { name: MYRULE, type: select, proxies: [PROXY, DIRECT] }
 - { name: DETOUR, type: select, proxies: [PROXY, DIRECT] }
 - { name: MANUAL, type: select, proxies: [{{ proxies | filter_proxies | join(',') }}] }
-- { name: HK-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='HK' and node.attr=='BGP'") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
-- { name: JP-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='JP' and node.attr=='BGP'") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
-- { name: SG-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='SG' and node.attr=='BGP'") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
-- { name: TW-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='TW' and node.attr=='BGP'") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
+- { name: HK-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='HK'") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
+- { name: JP-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='JP'") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
+- { name: SG-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='SG'") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
+- { name: TW-AUTO, type: url-test, proxies: [{{ proxies | filter_proxies("node.iso=='TW'") | join(',') }}], url: "http://www.gstatic.com/generate_204", interval: 120 }
 - { name: HK-PEER, type: select, proxies: [{{ proxies | filter_proxies("node.iso=='HK'") | join(',') }}] }
 - { name: JP-PEER, type: select, proxies: [{{ proxies | filter_proxies("node.iso=='JP'") | join(',') }}] }
 - { name: KR-PEER, type: select, proxies: [{{ proxies | filter_proxies("node.iso=='KR'") | join(',') }}] }
