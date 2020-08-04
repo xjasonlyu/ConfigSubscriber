@@ -9,8 +9,7 @@ def init_cache(app, config):
 
     if not app.debug:
         cache_config = config['settings'].get('cache')
-
-    if cache_config is None:
+    else:
         cache_config = {
             'CACHE_TYPE': 'null',
             'CACHE_NO_NULL_WARNING': True

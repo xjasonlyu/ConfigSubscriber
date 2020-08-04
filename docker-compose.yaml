@@ -5,6 +5,7 @@ services:
     volumes:
       - /etc/subscriber:/config:ro
       # - $PWD/subscribe:/subscribe:ro
+      # - $PWD/main.py:/main.py:ro
     restart: always
     network_mode: host
     # command: --debug
