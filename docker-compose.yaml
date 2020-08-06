@@ -3,7 +3,7 @@ services:
   subscriber:
     image: xjasonlyu/subscriber:latest
     volumes:
-      - /etc/subscriber:/config:ro
+      - $PWD/config:/config:ro
       # - $PWD/subscribe:/subscribe:ro
       # - $PWD/main.py:/main.py:ro
     restart: always
