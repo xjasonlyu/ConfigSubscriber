@@ -8,4 +8,6 @@ RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt \
     && rm -rf requirements.txt
 
+EXPOSE 9000
+
 ENTRYPOINT ["python", "/main.py"]
